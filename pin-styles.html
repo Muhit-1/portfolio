@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Card &amp; Pin Styles</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F7F3EB; --panel:#FFFDF8; --ink:#221E1A; --ink-soft:#6B6157;
+    --line:rgba(34,30,26,0.16); --grid-minor:rgba(34,30,26,0.06); --grid-major:rgba(34,30,26,0.12);
+    --accent:#FF5C00; --accent-deep:#C73700;
+    --shadow: 0 10px 26px rgba(34,30,26,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
+  .display{font-family:'Space Grotesk',sans-serif;}
+  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(var(--grid-minor) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px),
+      linear-gradient(var(--grid-major) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-major) 1px, transparent 1px);
+    background-size: 18px 18px, 18px 18px, 90px 90px, 90px 90px;
+  }
+  main{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:56px 32px 100px;}
+  .page-head{margin-bottom:50px;}
+  .page-head .eyebrow{font-size:11px;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;}
+  .page-head h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:700;margin:10px 0 8px;}
+  .page-head p{color:var(--ink-soft);font-size:15px;max-width:60ch;line-height:1.6;margin:0;}
+
+  .style-block{margin-bottom:88px;padding-top:40px;border-top:1px solid var(--line);}
+  .style-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+  .style-head .num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:.1em;}
+  .style-head h2{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin:2px 0 0;}
+  .style-desc{color:var(--ink-soft);font-size:13.5px;max-width:64ch;margin:0 0 34px;line-height:1.55;}
+  .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 22px;}
+  @media (max-width:820px){.row{grid-template-columns:1fr;}}
+
+  /* ============ STYLE 1 — Glossy Thumbtack ============ */
+  .s1-item{position:relative;}
+  .s1-pin{position:absolute;top:-19px;left:22px;z-index:2;filter:drop-shadow(0 4px 4px rgba(0,0,0,.28));}
+  .s1-card{background:var(--panel);border:1.5px solid var(--ink);padding:22px 20px 18px;box-shadow:var(--shadow);height:100%;}
+  .s1-card .id{font-size:10px;color:var(--accent);margin-bottom:8px;}
+  .s1-card h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;margin:0 0 6px;}
+  .s1-card .type{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+  .s1-card .stack{font-size:10px;color:var(--ink-soft);margin-bottom:12px;}
+  .s1-card .status{display:inline-block;font-size:10px;letter-spacing:.06em;padding:3px 8px;border:1px solid currentColor;}
+
+  /* ============ STYLE 2 — Flat Vector Pin ============ */
+  .s2-item{position:relative;}
+  .s2-pin{position:absolute;top:-17px;left:50%;transform:translateX(-50%);z-index:2;}
+  .s2-card{background:var(--panel);border-radius:16px;padding:30px 26px 26px;box-shadow:0 8px 22px rgba(34,30,26,.09);height:100%;}
+  .s2-card h3{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;margin:0 0 8px;}
+  .s2-card .type{font-size:13px;color:var(--ink-soft);margin-bottom:16px;}
+  .s2-card .stack{font-size:12.5px;color:var(--ink);margin-bottom:18px;}
+  .s2-card .status-row{display:flex;align-items:center;gap:7px;}
+  .s2-card .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);}
+  .s2-card .status-row span.txt{font-size:11.5px;color:var(--ink-soft);}
+
+  /* ============ STYLE 3 — Sticky Note ============ */
+  .s3-item{position:relative;}
+  .s3-pin{position:absolute;top:-8px;left:50%;transform:translateX(-50%);z-index:3;}
+  .s3-card{
+    position:relative; background:var(--panel); padding:26px 22px 22px;
+    box-shadow:0 12px 20px rgba(34,30,26,.14); height:100%;
+    clip-path:polygon(0 0,100% 0,100% 88%,88% 100%,0 100%);
+  }
+  .s3-card::after{
+    content:""; position:absolute; right:0; bottom:0; width:12%; height:12%;
+    background:linear-gradient(135deg, transparent 48%, rgba(34,30,26,.16) 50%, var(--bg) 51%);
+  }
+  .s3-card h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;margin:0 0 8px;font-style:italic;}
+  .s3-card .type{font-size:12.5px;color:var(--ink-soft);}
+
+  /* ============ STYLE 4 — Diagonal Corkboard ============ */
+  .s4-item{position:relative;}
+  .s4-pin{position:absolute;top:-16px;right:10px;z-index:3;filter:drop-shadow(0 4px 4px rgba(0,0,0,.3));}
+  .s4-card{background:#fff;border:1px solid rgba(34,30,26,.12);padding:14px 14px 20px;box-shadow:var(--shadow);height:100%;}
+  .s4-mono-block{
+    background:var(--accent); color:#fff; height:96px; display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk',sans-serif; font-size:34px; font-weight:700; margin-bottom:14px;
+  }
+  .s4-card h3{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;margin:0 0 4px;}
+  .s4-card .type{font-size:11.5px;color:var(--ink-soft);font-family:'JetBrains Mono',monospace;}
+
+  /* ============ STYLE 5 — Map-pin Marker / Tag ============ */
+  .s5-item{position:relative;padding-top:14px;}
+  .s5-pin{position:absolute;top:-14px;left:50%;transform:translateX(-50%);z-index:2;}
+  .s5-card{
+    background:var(--panel); border:1.4px solid var(--ink); padding:26px 22px 20px; height:100%;
+    clip-path:polygon(0 10px,calc(50% - 9px) 10px,50% 0,calc(50% + 9px) 10px,100% 10px,100% 100%,0 100%);
+  }
+  .s5-card h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;margin:6px 0 6px;text-align:center;}
+  .s5-card .type{font-size:12px;color:var(--ink-soft);text-align:center;margin-bottom:10px;}
+  .s5-card .stack{font-size:10px;color:var(--ink-soft);text-align:center;font-family:'JetBrains Mono',monospace;}
+
+  /* ============ STYLE 6 — Blueprint Dossier Row ============ */
+  .s6-row{grid-template-columns:1fr;gap:14px;}
+  .s6-item{position:relative;}
+  .s6-pin-l{position:absolute;top:-9px;left:14px;z-index:2;}
+  .s6-pin-r{position:absolute;top:-9px;right:14px;z-index:2;}
+  .s6-card{
+    background:var(--panel);border:1.5px solid var(--ink);
+    display:flex;align-items:center;gap:22px;padding:16px 26px;
+  }
+  .s6-card .id{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);width:64px;flex-shrink:0;}
+  .s6-card .name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14.5px;flex:1;}
+  .s6-card .stack{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-soft);flex:1;}
+  .s6-card .status{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;padding:3px 8px;border:1px solid currentColor;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<main>
+
+  <div class="page-head">
+    <div class="eyebrow mono">PROJECT SECTION — PIN &amp; CARD STYLE OPTIONS</div>
+    <h1 class="display">Six ways to pin a project</h1>
+    <p>Six different pin shapes paired with six different card treatments, all in the same paper/blueprint palette. Same three real projects in every row so it's an apples-to-apples comparison — tell me the number you want carried into the main page.</p>
+  </div>
+
+  <!-- STYLE 1 -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">01</span><h2 class="display">Glossy Thumbtack</h2></div>
+    <p class="style-desc">What you have now, refined — a rounded, shaded pin with a highlight, on the bordered spec-sheet card. Familiar and tidy.</p>
+    <div class="row">
+      <div class="s1-item" style="transform:rotate(-1.6deg);">
+        <svg class="s1-pin" width="30" height="40" viewBox="0 0 30 40" fill="none">
+          <line x1="15" y1="19" x2="15" y2="33" stroke="#9A9A9A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="15" cy="13" r="11" fill="var(--accent-deep)"/>
+          <circle cx="15" cy="11" r="10" fill="var(--accent)"/>
+          <ellipse cx="10.5" cy="7" rx="3.2" ry="2" fill="#fff" opacity="0.55" transform="rotate(-25 10.5 7)"/>
+        </svg>
+        <div class="s1-card">
+          <div class="mono id">DWG-01</div>
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="type">Web App</div>
+          <div class="mono stack">React · Node · Maps API</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="s1-item" style="transform:rotate(1.2deg);">
+        <svg class="s1-pin" width="30" height="40" viewBox="0 0 30 40" fill="none">
+          <line x1="15" y1="19" x2="15" y2="33" stroke="#9A9A9A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="15" cy="13" r="11" fill="var(--accent-deep)"/>
+          <circle cx="15" cy="11" r="10" fill="var(--accent)"/>
+          <ellipse cx="10.5" cy="7" rx="3.2" ry="2" fill="#fff" opacity="0.55" transform="rotate(-25 10.5 7)"/>
+        </svg>
+        <div class="s1-card">
+          <div class="mono id">DWG-02</div>
+          <h3>KeyQuest</h3>
+          <div class="type">Typing &amp; Riddle Game</div>
+          <div class="mono stack">JavaScript · CSS</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="s1-item" style="transform:rotate(-0.8deg);">
+        <svg class="s1-pin" width="30" height="40" viewBox="0 0 30 40" fill="none">
+          <line x1="15" y1="19" x2="15" y2="33" stroke="#9A9A9A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="15" cy="13" r="11" fill="var(--accent-deep)"/>
+          <circle cx="15" cy="11" r="10" fill="var(--accent)"/>
+          <ellipse cx="10.5" cy="7" rx="3.2" ry="2" fill="#fff" opacity="0.55" transform="rotate(-25 10.5 7)"/>
+        </svg>
+        <div class="s1-card">
+          <div class="mono id">DWG-03</div>
+          <h3>Task Manager</h3>
+          <div class="type">Application</div>
+          <div class="mono stack">React · Firebase</div>
+          <div class="mono status" style="color:var(--ink-soft);">BUILT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STYLE 2 -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">02</span><h2 class="display">Flat Vector Pin</h2></div>
+    <p class="style-desc">A flat, two-tone pin icon — no gloss, no rotation — on a soft rounded card with a plain drop shadow instead of a hard border. Calmer and more modern than the blueprint sheets.</p>
+    <div class="row">
+      <div class="s2-item">
+        <svg class="s2-pin" width="26" height="34" viewBox="0 0 26 34" fill="none">
+          <path d="M6 9 L11 30 L15 30 L20 9 Z" fill="var(--accent-deep)"/>
+          <ellipse cx="13" cy="8" rx="9" ry="6" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+        </svg>
+        <div class="s2-card">
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="type">Web App · React, Node, Maps API</div>
+          <div class="status-row"><span class="dot"></span><span class="txt">Live</span></div>
+        </div>
+      </div>
+      <div class="s2-item">
+        <svg class="s2-pin" width="26" height="34" viewBox="0 0 26 34" fill="none">
+          <path d="M6 9 L11 30 L15 30 L20 9 Z" fill="var(--accent-deep)"/>
+          <ellipse cx="13" cy="8" rx="9" ry="6" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+        </svg>
+        <div class="s2-card">
+          <h3>KeyQuest</h3>
+          <div class="type">Typing &amp; riddle game · JS, CSS</div>
+          <div class="status-row"><span class="dot"></span><span class="txt">Live</span></div>
+        </div>
+      </div>
+      <div class="s2-item">
+        <svg class="s2-pin" width="26" height="34" viewBox="0 0 26 34" fill="none">
+          <path d="M6 9 L11 30 L15 30 L20 9 Z" fill="var(--accent-deep)"/>
+          <ellipse cx="13" cy="8" rx="9" ry="6" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+        </svg>
+        <div class="s2-card">
+          <h3>Task Manager</h3>
+          <div class="type">Application · React, Firebase</div>
+          <div class="status-row"><span class="dot" style="background:var(--ink-soft);"></span><span class="txt">Built</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STYLE 3 -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">03</span><h2 class="display">Sticky Note</h2></div>
+    <p class="style-desc">Each project as an actual note — a peeled bottom-right corner, a tiny flat pin barely holding it, a slight tilt. The most literal "stuck to the page" read.</p>
+    <div class="row">
+      <div class="s3-item" style="transform:rotate(-2.2deg);">
+        <svg class="s3-pin" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="var(--accent)" stroke="var(--accent-deep)" stroke-width="1"/></svg>
+        <div class="s3-card">
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="type">Web App — React · Node · Maps API</div>
+        </div>
+      </div>
+      <div class="s3-item" style="transform:rotate(1.8deg);">
+        <svg class="s3-pin" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="var(--accent)" stroke="var(--accent-deep)" stroke-width="1"/></svg>
+        <div class="s3-card">
+          <h3>KeyQuest</h3>
+          <div class="type">Typing &amp; Riddle Game — JS · CSS</div>
+        </div>
+      </div>
+      <div class="s3-item" style="transform:rotate(-1.2deg);">
+        <svg class="s3-pin" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="var(--accent)" stroke="var(--accent-deep)" stroke-width="1"/></svg>
+        <div class="s3-card">
+          <h3>Task Manager</h3>
+          <div class="type">Application — React · Firebase</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STYLE 4 -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">04</span><h2 class="display">Diagonal Corkboard</h2></div>
+    <p class="style-desc">A polaroid-style frame with a monogram block standing in for a screenshot, pinned through the corner at an angle rather than straight down — like it was actually stuck to a board.</p>
+    <div class="row">
+      <div class="s4-item" style="transform:rotate(-2deg);">
+        <svg class="s4-pin" width="30" height="40" viewBox="0 0 30 40" fill="none" style="transform:rotate(38deg);">
+          <line x1="15" y1="19" x2="15" y2="33" stroke="#9A9A9A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="15" cy="13" r="11" fill="var(--accent-deep)"/>
+          <circle cx="15" cy="11" r="10" fill="var(--accent)"/>
+          <ellipse cx="10.5" cy="7" rx="3.2" ry="2" fill="#fff" opacity="0.55" transform="rotate(-25 10.5 7)"/>
+        </svg>
+        <div class="s4-card">
+          <div class="s4-mono-block">D</div>
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="type">WEB APP · LIVE</div>
+        </div>
+      </div>
+      <div class="s4-item" style="transform:rotate(1.6deg);">
+        <svg class="s4-pin" width="30" height="40" viewBox="0 0 30 40" fill="none" style="transform:rotate(-32deg);">
+          <line x1="15" y1="19" x2="15" y2="33" stroke="#9A9A9A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="15" cy="13" r="11" fill="var(--accent-deep)"/>
+          <circle cx="15" cy="11" r="10" fill="var(--accent)"/>
+          <ellipse cx="10.5" cy="7" rx="3.2" ry="2" fill="#fff" opacity="0.55" transform="rotate(-25 10.5 7)"/>
+        </svg>
+        <div class="s4-card">
+          <div class="s4-mono-block">K</div>
+          <h3>KeyQuest</h3>
+          <div class="type">GAME · LIVE</div>
+        </div>
+      </div>
+      <div class="s4-item" style="transform:rotate(-1.3deg);">
+        <svg class="s4-pin" width="30" height="40" viewBox="0 0 30 40" fill="none" style="transform:rotate(38deg);">
+          <line x1="15" y1="19" x2="15" y2="33" stroke="#9A9A9A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="15" cy="13" r="11" fill="var(--accent-deep)"/>
+          <circle cx="15" cy="11" r="10" fill="var(--accent)"/>
+          <ellipse cx="10.5" cy="7" rx="3.2" ry="2" fill="#fff" opacity="0.55" transform="rotate(-25 10.5 7)"/>
+        </svg>
+        <div class="s4-card">
+          <div class="s4-mono-block">T</div>
+          <h3>Task Manager</h3>
+          <div class="type">APPLICATION · BUILT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STYLE 5 -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">05</span><h2 class="display">Marker Tag</h2></div>
+    <p class="style-desc">Not a pushpin at all — a map-pin / location marker drops onto a die-cut notch at the top of the card, like the project has been dropped onto the page rather than pinned to it.</p>
+    <div class="row">
+      <div class="s5-item">
+        <svg class="s5-pin" width="24" height="30" viewBox="0 0 26 34" fill="none">
+          <path d="M13 2C7 2 3 6.2 3 11.5 3 18 13 32 13 32S23 18 23 11.5C23 6.2 19 2 13 2Z" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+          <circle cx="13" cy="11.5" r="4" fill="var(--panel)"/>
+        </svg>
+        <div class="s5-card">
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="type">Web App</div>
+          <div class="stack">REACT · NODE · MAPS API</div>
+        </div>
+      </div>
+      <div class="s5-item">
+        <svg class="s5-pin" width="24" height="30" viewBox="0 0 26 34" fill="none">
+          <path d="M13 2C7 2 3 6.2 3 11.5 3 18 13 32 13 32S23 18 23 11.5C23 6.2 19 2 13 2Z" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+          <circle cx="13" cy="11.5" r="4" fill="var(--panel)"/>
+        </svg>
+        <div class="s5-card">
+          <h3>KeyQuest</h3>
+          <div class="type">Typing &amp; Riddle Game</div>
+          <div class="stack">JAVASCRIPT · CSS</div>
+        </div>
+      </div>
+      <div class="s5-item">
+        <svg class="s5-pin" width="24" height="30" viewBox="0 0 26 34" fill="none">
+          <path d="M13 2C7 2 3 6.2 3 11.5 3 18 13 32 13 32S23 18 23 11.5C23 6.2 19 2 13 2Z" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+          <circle cx="13" cy="11.5" r="4" fill="var(--panel)"/>
+        </svg>
+        <div class="s5-card">
+          <h3>Task Manager</h3>
+          <div class="type">Application</div>
+          <div class="stack">REACT · FIREBASE</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STYLE 6 -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">06</span><h2 class="display">Blueprint Dossier Row</h2></div>
+    <p class="style-desc">No tilt, two small pins at both top corners instead of one — the most "filed" and orderly option, closest to the spec-sheet tables elsewhere on the page. Reads as a list, not a board.</p>
+    <div class="row s6-row">
+      <div class="s6-item">
+        <svg class="s6-pin-l" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.2" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/></svg>
+        <svg class="s6-pin-r" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.2" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/></svg>
+        <div class="s6-card">
+          <div class="id">DWG-01</div>
+          <div class="name">Dhaka Bus Navigator</div>
+          <div class="stack">React · Node · Maps API</div>
+          <div class="status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="s6-item">
+        <svg class="s6-pin-l" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.2" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/></svg>
+        <svg class="s6-pin-r" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.2" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/></svg>
+        <div class="s6-card">
+          <div class="id">DWG-02</div>
+          <div class="name">KeyQuest</div>
+          <div class="stack">JavaScript · CSS</div>
+          <div class="status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="s6-item">
+        <svg class="s6-pin-l" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.2" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/></svg>
+        <svg class="s6-pin-r" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.2" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/></svg>
+        <div class="s6-card">
+          <div class="id">DWG-03</div>
+          <div class="name">Task Manager</div>
+          <div class="stack">React · Firebase</div>
+          <div class="status" style="color:var(--ink-soft);">BUILT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>
