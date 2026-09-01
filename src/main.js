@@ -20,14 +20,10 @@ gsap.registerPlugin(ScrollTrigger);
     var deg = rotates[i % rotates.length];
     el.style.transform = 'rotate(' + deg + 'deg)';
     var statusColor = p.status === 'LIVE' ? 'var(--accent)' : 'var(--ink-soft)';
-    var pinSide = deg < 0 ? 'left:20px;' : 'right:20px;';
     el.innerHTML =
-      '<svg class="pin" style="' + pinSide + '" width="26" height="36" viewBox="0 0 26 36" fill="none">' +
-        '<line x1="13" y1="17" x2="13" y2="29" stroke="#9A9A9A" stroke-width="1.6" stroke-linecap="round"/>' +
-        '<circle cx="13" cy="12" r="9.5" fill="var(--accent-deep)"/>' +
-        '<circle cx="13" cy="10.5" r="8.5" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>' +
-        '<ellipse cx="9.5" cy="7.5" rx="2.6" ry="1.7" fill="#fff" opacity="0.5" transform="rotate(-25 9.5 7.5)"/>' +
-      '</svg>' +
+      '<div class="behind-a"></div>' +
+      '<div class="behind-b"></div>' +
+      '<img class="pin" src="/img/just-pin.png" alt="">' +
       '<div class="card">' +
         '<div class="mono id">' + p.id + '</div>' +
         '<h3>' + p.name + '</h3>' +
@@ -86,7 +82,7 @@ gsap.registerPlugin(ScrollTrigger);
     heroTl
       .from('#dock', { opacity: 0, x: -30 }, 0)
       .from('.title-block-main > *', { opacity: 0, y: 24, stagger: 0.08 }, 0.1)
-      .from('.photo-frame', { opacity: 0, scale: 0.92, duration: 0.8 }, 0.2);
+      .from('.hero-photo', { opacity: 0, scale: 0.92, duration: 0.8 }, 0.2);
 
     gsap.from(grid.children, {
       opacity: 0,
