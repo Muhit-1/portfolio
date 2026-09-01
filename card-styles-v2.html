@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Card &amp; Hero Styles — v2 (from reference photos)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F7F3EB; --panel:#FFFDF8; --ink:#221E1A; --ink-soft:#6B6157;
+    --line:rgba(34,30,26,0.16); --grid-minor:rgba(34,30,26,0.06); --grid-major:rgba(34,30,26,0.12);
+    --accent:#FF5C00; --accent-deep:#C73700;
+    --shadow: 0 10px 26px rgba(34,30,26,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
+  .display{font-family:'Space Grotesk',sans-serif;}
+  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(var(--grid-minor) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px),
+      linear-gradient(var(--grid-major) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-major) 1px, transparent 1px);
+    background-size: 18px 18px, 18px 18px, 90px 90px, 90px 90px;
+  }
+  main{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:56px 32px 120px;}
+  .page-head{margin-bottom:50px;}
+  .page-head .eyebrow{font-size:11px;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;}
+  .page-head h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:700;margin:10px 0 8px;}
+  .page-head p{color:var(--ink-soft);font-size:15px;max-width:66ch;line-height:1.6;margin:0 0 6px;}
+  .page-head p.note{font-size:13px;color:var(--accent-deep);}
+
+  .style-block{margin-bottom:92px;padding-top:40px;border-top:1px solid var(--line);}
+  .style-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+  .style-head .num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:.1em;}
+  .style-head h2{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin:2px 0 0;}
+  .style-desc{color:var(--ink-soft);font-size:13.5px;max-width:66ch;margin:0 0 40px;line-height:1.55;}
+  .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:46px 24px;}
+  @media (max-width:820px){.row{grid-template-columns:1fr;}}
+
+  /* ============================================================
+     SHARED: glossy pushpin (recolors via currentColor + vars)
+     ============================================================ */
+  .pin-svg{filter:drop-shadow(0 4px 4px rgba(0,0,0,.3));}
+
+  /* ============================================================
+     SHARED: sticky-note base + curl
+     ============================================================ */
+  .stk-wrap{position:relative;}
+  .stk-note{
+    position:relative; background:var(--panel); padding:30px 24px 30px;
+    box-shadow:0 16px 28px rgba(34,30,26,.16), 0 2px 6px rgba(34,30,26,.07);
+    height:100%;
+  }
+  .stk-note h3{font-family:'Space Grotesk',sans-serif;font-size:16.5px;font-weight:600;margin:0 0 6px;line-height:1.25;}
+  .stk-note .type{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+  .stk-note .stack{font-size:10.5px;color:var(--ink-soft);margin-bottom:14px;}
+  .stk-note .status{display:inline-block;font-size:10px;letter-spacing:.06em;padding:3px 8px;border:1px solid currentColor;}
+  .stk-note .id{font-size:10px;color:var(--accent);margin-bottom:8px;letter-spacing:.05em;}
+
+  /* curl fold: a triangular flap peeled at bottom-right */
+  .curl-sm{clip-path:polygon(0 0,100% 0,100% 91%,91% 100%,0 100%);}
+  .curl-sm::after{
+    content:"";position:absolute;right:0;bottom:0;width:9%;height:9%;
+    background:linear-gradient(135deg, transparent 46%, rgba(34,30,26,.14) 48%, var(--bg) 50%);
+  }
+  .curl-lg{clip-path:polygon(0 0,100% 0,100% 76%,76% 100%,0 100%);}
+  /* the lifted corner is a separate sibling (not a pseudo of the clipped note) so its
+     drop-shadow can fall outside the note's own clip-path instead of being cut off */
+  .curl-flap{
+    position:absolute; right:0; bottom:0; width:25%; height:25%; pointer-events:none;
+    clip-path:polygon(100% 0, 0 100%, 100% 100%);
+    background:linear-gradient(135deg, rgba(34,30,26,.10) 0%, rgba(34,30,26,.22) 45%, #FDF8ED 50%, #FBF3E2 100%);
+    filter:drop-shadow(-4px 5px 6px rgba(34,30,26,.45));
+  }
+
+  /* ---------------- STYLE 1 — Classic Pin & Curl ---------------- */
+  .v1-pin{position:absolute;top:-17px;left:50%;transform:translateX(-50%);z-index:3;}
+
+  /* ---------------- STYLE 2 — Stacked Notes ---------------- */
+  .v2-item{position:relative;}
+  .v2-behind-a{position:absolute;inset:10px -6px -10px 6px;background:var(--panel);border:1px solid var(--line);transform:rotate(3deg);z-index:0;}
+  .v2-behind-b{position:absolute;inset:6px -3px -6px 3px;background:var(--panel);border:1px solid var(--line);transform:rotate(-2deg);z-index:0;}
+  .v2-note{position:relative;z-index:1;}
+  .v2-pin{position:absolute;top:-20px;left:50%;transform:translateX(-50%);z-index:3;width:42px;filter:drop-shadow(0 4px 4px rgba(0,0,0,.3));}
+
+  /* ---------------- STYLE 3 — Big Curl, Corner Pin ---------------- */
+  .v3-pin{position:absolute;top:-14px;right:18px;z-index:3;}
+
+  /* ---------------- STYLE 4 — Warm Tint Paper ---------------- */
+  .v4-note{--panel: color-mix(in srgb, var(--accent) 8%, var(--panel));}
+  .v4-pin{position:absolute;top:-15px;left:26px;z-index:3;}
+  .v4-note h3{color:var(--accent-deep);}
+
+  /* ---------------- STYLE 5 — Mini Pin, Compact ---------------- */
+  .v5-note{padding:20px 18px 22px;}
+  .v5-pin{position:absolute;top:-11px;left:50%;transform:translateX(-50%);z-index:3;}
+  .v5-note h3{font-size:14.5px;}
+  .v5-note .type,.v5-note .stack{font-size:10.5px;}
+
+  /* ---------------- STYLE 6 — Board Scatter ---------------- */
+  .v6-note{box-shadow:0 22px 34px rgba(34,30,26,.22), 0 3px 8px rgba(34,30,26,.1);}
+  .v6-pin{position:absolute;top:-19px;z-index:3;}
+
+  /* ============================================================
+     HERO PHOTO CARD — two clip colour options
+     ============================================================ */
+  .hero-demo-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:60px;}
+  @media (max-width:760px){.hero-demo-row{grid-template-columns:1fr;}}
+  .hero-demo{display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:30px;}
+  .hero-demo .cap{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--ink-soft);text-align:center;}
+  .hero-demo .cap b{color:var(--ink);}
+
+  .hphoto-stage{position:relative;width:270px;height:300px;}
+  .hphoto-backing{
+    position:absolute;inset:0;margin:auto;width:246px;height:280px;
+    background:var(--accent);transform:rotate(-6deg);box-shadow:var(--shadow);
+  }
+  .hphoto-backing.ink{background:var(--ink);}
+  .hphoto-frame{
+    position:absolute;inset:0;margin:auto;width:228px;height:fit-content;
+    transform:rotate(3deg);
+  }
+  .hphoto-frame img{width:100%;display:block;border:7px solid #FFFDF8;box-shadow:0 14px 26px rgba(0,0,0,.28);filter:grayscale(15%);}
+  .hclip{position:absolute;top:0%;left:2%;width:96px;height:134px;z-index:4;transform:rotate(-30deg);filter:drop-shadow(0 4px 4px rgba(0,0,0,.32));}
+
+  /* ============================================================
+     ASSET CHECK — your uploaded pin/card PNGs, judged against theme
+     ============================================================ */
+  .asset-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;}
+  @media (max-width:820px){.asset-grid{grid-template-columns:1fr 1fr;}}
+  .asset-card{background:var(--panel);border:1px solid var(--line);padding:14px;box-shadow:var(--shadow);}
+  .asset-thumb{width:100%;height:130px;object-fit:contain;background:var(--bg);border-radius:3px;display:block;}
+  .asset-fname{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);margin-top:9px;word-break:break-word;}
+  .asset-verdict{display:inline-block;margin-top:7px;font-size:9.5px;letter-spacing:.06em;padding:3px 8px;border:1px solid currentColor;font-family:'JetBrains Mono',monospace;}
+  .v-match{color:var(--accent);}
+  .v-fix{color:var(--ink-soft);}
+  .asset-note{font-size:11.5px;color:var(--ink-soft);margin-top:8px;line-height:1.5;}
+  .asset-pair{display:flex;gap:8px;}
+  .asset-pair figure{flex:1;margin:0;text-align:center;}
+  .asset-pair img{width:100%;height:110px;object-fit:contain;background:var(--bg);border-radius:3px;}
+  .asset-pair figcaption{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-soft);margin-top:4px;letter-spacing:.05em;}
+  .filt-warm{filter:sepia(.3) saturate(1.2) hue-rotate(-6deg) brightness(1.03);}
+  .filt-hue{filter:hue-rotate(25deg) saturate(1.05);}
+
+  /* ============================================================
+     STYLE 7 — Taped Corners (from your "Paper with sellotaped
+     corners" reference code — recoloured, no pin, tape holds it down)
+     ============================================================ */
+  .tp-note{
+    position:relative; background:var(--panel); padding:28px 22px 24px; height:100%;
+    box-shadow:0 10px 22px rgba(34,30,26,.15), 0 2px 5px rgba(34,30,26,.07);
+  }
+  .tp-note::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:
+      linear-gradient(transparent 49.3%, rgba(34,30,26,.05) 50%, transparent 50.7%),
+      linear-gradient(90deg, transparent 49.3%, rgba(34,30,26,.05) 50%, transparent 50.7%);
+  }
+  .tp-tape{
+    position:absolute; top:-11px; width:62px; height:24px;
+    background:rgba(230,220,196,.62);
+    border-left:1px dotted rgba(178,163,132,.55); border-right:1px dotted rgba(178,163,132,.55);
+    box-shadow:0 1px 3px rgba(34,30,26,.12);
+    z-index:3;
+  }
+  .tp-tape.left{left:14px; transform:rotate(-7deg);}
+  .tp-tape.right{right:14px; transform:rotate(6deg);}
+
+  /* ============================================================
+     STYLE 8 — Pinned + Lifted Shadow (shadow technique from your
+     "Pure CSS Paper Lift Effect" reference, pin = your real PNG)
+     ============================================================ */
+  .lift-wrap{position:relative;}
+  .lift-note{
+    position:relative; background:var(--panel); padding:28px 22px 24px; height:100%;
+    z-index:1;
+  }
+  .lift-note::before, .lift-note::after{
+    content:""; position:absolute; bottom:6px; width:38%; height:12px;
+    box-shadow:0 14px 20px rgba(34,30,26,.4); z-index:-1;
+    transition:box-shadow .25s ease;
+  }
+  .lift-note::before{left:8px; transform:skew(-7deg) rotate(-5deg);}
+  .lift-note::after{right:8px; transform:skew(7deg) rotate(5deg);}
+  .lift-wrap:hover .lift-note::before, .lift-wrap:hover .lift-note::after{
+    box-shadow:0 8px 16px rgba(34,30,26,.28);
+  }
+  .lift-pin{
+    position:absolute; top:-22px; left:50%; transform:translateX(-50%);
+    width:44px; z-index:3; filter:drop-shadow(0 4px 4px rgba(0,0,0,.3));
+  }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<main>
+
+  <div class="page-head">
+    <div class="eyebrow mono">V2 — BUILT FROM YOUR CANVA REFERENCE PHOTOS</div>
+    <h1 class="display">Sticky-note cards &amp; pinned hero photo</h1>
+    <p>Shape and pin language taken from your reference images (round glossy thumbtack, peeled bottom-right corner, diagonally-clipped photo), recoloured into your existing paper/blueprint theme. Six card styles below use your six real projects — same three per row for comparison. Tell me the number.</p>
+    <p class="note mono">Nothing here is wired into the live site yet — this is the design pass you asked for.</p>
+  </div>
+
+  <!-- ============ HERO PHOTO CARD ============ -->
+  <section class="style-block" style="border-top:none;padding-top:0;">
+    <div class="style-head"><span class="num mono">HERO</span><h2 class="display">Pinned photo, two clip colours</h2></div>
+    <p class="style-desc">Your photo keeps its white polaroid border. Behind it, a solid colour card peeks out at an opposite angle — like the yellow sheet in your reference. The paperclip grabs both layers through the top-left corner. Left = clip in your accent orange. Right = clip in ink (closer to the neutral silver in your reference).</p>
+    <div class="hero-demo-row">
+      <div class="hero-demo">
+        <div class="hphoto-stage">
+          <div class="hphoto-backing"></div>
+          <svg class="hclip" viewBox="0 0 64 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="clipGradA" x1="10%" y1="0%" x2="90%" y2="100%">
+                <stop offset="0%" stop-color="#FFC9A0"/>
+                <stop offset="42%" stop-color="var(--accent)"/>
+                <stop offset="100%" stop-color="var(--accent-deep)"/>
+              </linearGradient>
+            </defs>
+            <path d="M19 22 V64 a13 13 0 0 0 26 0 V16 a8 8 0 0 0 -16 0 V61 a3 3 0 0 0 6 0 V26" stroke="url(#clipGradA)" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="hphoto-frame">
+            <img src="data:image/jpeg;base64,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" alt="Portrait of Muhit Rahman">
+          </div>
+        </div>
+        <div class="cap">A — <b>ACCENT CLIP</b> · orange paperclip, orange backing card</div>
+      </div>
+      <div class="hero-demo">
+        <div class="hphoto-stage">
+          <div class="hphoto-backing ink"></div>
+          <svg class="hclip silver" viewBox="0 0 64 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="clipGradB" x1="10%" y1="0%" x2="90%" y2="100%">
+                <stop offset="0%" stop-color="#F2F2F2"/>
+                <stop offset="42%" stop-color="#B9B9B9"/>
+                <stop offset="100%" stop-color="#7C7C7C"/>
+              </linearGradient>
+            </defs>
+            <path d="M19 22 V64 a13 13 0 0 0 26 0 V16 a8 8 0 0 0 -16 0 V61 a3 3 0 0 0 6 0 V26" stroke="url(#clipGradB)" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="hphoto-frame">
+            <img src="data:image/jpeg;base64,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" alt="Portrait of Muhit Rahman">
+          </div>
+        </div>
+        <div class="cap">B — <b>INK CLIP</b> · silver paperclip, ink-dark backing card</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ASSET CHECK — your uploaded PNGs ============ -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">ASSETS</span><h2 class="display">Color check on your 9 uploads</h2></div>
+    <p class="style-desc">Verdict on each: does it sit comfortably on your cream/orange theme as-is, or does it need a colour nudge? For the two that need it, the second thumbnail shows the fix applied with a CSS filter — cheap to tune, no image editing required.</p>
+
+    <div class="asset-grid">
+      <div class="asset-card">
+        <img class="asset-thumb" src="assests/pin.png" alt="pin.png">
+        <div class="asset-fname">pin.png</div>
+        <span class="asset-verdict v-match">MATCHES</span>
+        <div class="asset-note">Already your exact accent orange, glossy and clean. Use as-is for the project-card pin.</div>
+      </div>
+      <div class="asset-card">
+        <img class="asset-thumb" src="assests/just pin .png" alt="just pin.png">
+        <div class="asset-fname">just pin .png</div>
+        <span class="asset-verdict v-match">MATCHES</span>
+        <div class="asset-note">Same orange family, different angle (more top-down). Interchangeable with pin.png — pick whichever angle reads best at small size.</div>
+      </div>
+      <div class="asset-card">
+        <img class="asset-thumb" src="assests/card and pin style 2.png" alt="card and pin style 2.png">
+        <div class="asset-fname">card and pin style 2.png</div>
+        <span class="asset-verdict v-match">MATCHES</span>
+        <div class="asset-note">Cream sticky note + orange pin, both already on-theme. This is the closest real-asset match to the "Big Curl, Corner Pin" style you picked.</div>
+      </div>
+      <div class="asset-card">
+        <img class="asset-thumb" src="assests/card an pin style.png" alt="card an pin style.png">
+        <div class="asset-fname">card an pin style.png</div>
+        <span class="asset-verdict v-match">MATCHES</span>
+        <div class="asset-note">Stacked-notes version of the same combo. Good reference if you want the "Stacked Notes" style built from real photos instead of hand-drawn layers.</div>
+      </div>
+      <div class="asset-card">
+        <img class="asset-thumb" src="assests/card style.png" alt="card style.png">
+        <div class="asset-fname">card style.png</div>
+        <span class="asset-verdict v-match">MATCHES</span>
+        <div class="asset-note">Torn lined notebook paper, warm white. Ties in nicely with the ruled-ledger look already on your About section.</div>
+      </div>
+      <div class="asset-card">
+        <img class="asset-thumb" src="assests/card style3.png" alt="card style3.png">
+        <div class="asset-fname">card style3.png</div>
+        <span class="asset-verdict v-match">MATCHES</span>
+        <div class="asset-note">Same paper, taped corners, red margin rule. Warm white base is fine; the thin red margin line is subtle enough to leave alone.</div>
+      </div>
+      <div class="asset-card">
+        <img class="asset-thumb filt-hue" src="assests/3 type of pin .png" alt="3 type of pin.png, hue-shifted">
+        <div class="asset-fname">3 type of pin .png</div>
+        <span class="asset-verdict v-fix">NEEDS A NUDGE</span>
+        <div class="asset-note">The only one that's genuinely off — true red, not your orange. Shown here with <code class="mono">hue-rotate(25deg)</code> applied to pull it toward accent. You already have two pins that match natively, so easiest is to just not use this one.</div>
+      </div>
+      <div class="asset-card">
+        <img class="asset-thumb filt-warm" src="assests/card and pin stle.png" alt="card and pin stle.png, warmed">
+        <div class="asset-fname">card and pin stle.png</div>
+        <span class="asset-verdict v-fix">NEEDS A NUDGE</span>
+        <div class="asset-note">Paper leans cool grey instead of warm cream. Shown here with a light sepia/warm filter to pull it toward your <code class="mono">--panel</code> tone.</div>
+      </div>
+      <div class="asset-card">
+        <img class="asset-thumb filt-warm" src="assests/card styl2.png" alt="card styl2.png, warmed">
+        <div class="asset-fname">card styl2.png</div>
+        <span class="asset-verdict v-fix">NEEDS A NUDGE</span>
+        <div class="asset-note">Same cool-grey issue as above, same fix. The washi tape square is a nice detail worth keeping either way.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STYLE 1 — Classic Pin & Curl ============ -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">01</span><h2 class="display">Classic Pin &amp; Curl</h2></div>
+    <p class="style-desc">The baseline read of your reference: cream note, glossy orange thumbtack dead-centre top, a modest peeled corner bottom-right. Closest one-to-one match to the photo you sent.</p>
+    <div class="row">
+      <div class="stk-wrap" style="transform:rotate(-1.6deg);">
+        <svg class="v1-pin pin-svg" width="32" height="42" viewBox="0 0 32 42" fill="none">
+          <line x1="16" y1="20" x2="16" y2="35" stroke="#9A9A9A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="16" cy="14" r="12" fill="var(--accent-deep)"/>
+          <circle cx="16" cy="12" r="11" fill="var(--accent)"/>
+          <ellipse cx="11.5" cy="7.5" rx="3.4" ry="2.2" fill="#fff" opacity="0.55" transform="rotate(-25 11.5 7.5)"/>
+        </svg>
+        <div class="stk-note curl-sm">
+          <div class="id mono">DWG-01</div>
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="type">Web App</div>
+          <div class="mono stack">React · Node · Maps API</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="stk-wrap" style="transform:rotate(1.2deg);">
+        <svg class="v1-pin pin-svg" width="32" height="42" viewBox="0 0 32 42" fill="none">
+          <line x1="16" y1="20" x2="16" y2="35" stroke="#9A9A9A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="16" cy="14" r="12" fill="var(--accent-deep)"/>
+          <circle cx="16" cy="12" r="11" fill="var(--accent)"/>
+          <ellipse cx="11.5" cy="7.5" rx="3.4" ry="2.2" fill="#fff" opacity="0.55" transform="rotate(-25 11.5 7.5)"/>
+        </svg>
+        <div class="stk-note curl-sm">
+          <div class="id mono">DWG-02</div>
+          <h3>KeyQuest</h3>
+          <div class="type">Typing &amp; Riddle Game</div>
+          <div class="mono stack">JavaScript · CSS</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="stk-wrap" style="transform:rotate(-0.9deg);">
+        <svg class="v1-pin pin-svg" width="32" height="42" viewBox="0 0 32 42" fill="none">
+          <line x1="16" y1="20" x2="16" y2="35" stroke="#9A9A9A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="16" cy="14" r="12" fill="var(--accent-deep)"/>
+          <circle cx="16" cy="12" r="11" fill="var(--accent)"/>
+          <ellipse cx="11.5" cy="7.5" rx="3.4" ry="2.2" fill="#fff" opacity="0.55" transform="rotate(-25 11.5 7.5)"/>
+        </svg>
+        <div class="stk-note curl-sm">
+          <div class="id mono">DWG-03</div>
+          <h3>Task Manager</h3>
+          <div class="type">Application</div>
+          <div class="mono stack">React · Firebase</div>
+          <div class="mono status" style="color:var(--ink-soft);">BUILT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STYLE 2 — Stacked Notes ============ -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">02</span><h2 class="display">Stacked Notes</h2></div>
+    <p class="style-desc">Like the multi-sheet pad in your reference — two faint sheets peek out from behind the top note, pinned through all three at once. More depth, feels like a real pad on the board.</p>
+    <div class="row">
+      <div class="v2-item" style="transform:rotate(-1.4deg);">
+        <div class="v2-behind-a"></div>
+        <div class="v2-behind-b"></div>
+        <img class="v2-pin" src="assests/just pin .png" alt="pin">
+        <div class="stk-note v2-note curl-sm">
+          <div class="id mono">DWG-01</div>
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="type">Web App</div>
+          <div class="mono stack">React · Node · Maps API</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="v2-item" style="transform:rotate(1.1deg);">
+        <div class="v2-behind-a"></div>
+        <div class="v2-behind-b"></div>
+        <img class="v2-pin" src="assests/just pin .png" alt="pin">
+        <div class="stk-note v2-note curl-sm">
+          <div class="id mono">DWG-02</div>
+          <h3>KeyQuest</h3>
+          <div class="type">Typing &amp; Riddle Game</div>
+          <div class="mono stack">JavaScript · CSS</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="v2-item" style="transform:rotate(-0.7deg);">
+        <div class="v2-behind-a"></div>
+        <div class="v2-behind-b"></div>
+        <img class="v2-pin" src="assests/just pin .png" alt="pin">
+        <div class="stk-note v2-note curl-sm">
+          <div class="id mono">DWG-03</div>
+          <h3>Task Manager</h3>
+          <div class="type">Application</div>
+          <div class="mono stack">React · Firebase</div>
+          <div class="mono status" style="color:var(--ink-soft);">BUILT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STYLE 3 — Big Curl, Corner Pin ============ -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">03</span><h2 class="display">Big Curl, Corner Pin</h2></div>
+    <p class="style-desc">The dramatic dog-ear from your blue-note reference — a much bigger peel, with the pin moved to the top-right corner instead of centre so it doesn't fight the curl for attention.</p>
+    <div class="row">
+      <div class="stk-wrap" style="transform:rotate(-1.8deg);">
+        <svg class="v3-pin pin-svg" width="28" height="38" viewBox="0 0 28 38" fill="none">
+          <line x1="14" y1="18" x2="14" y2="31" stroke="#9A9A9A" stroke-width="1.7" stroke-linecap="round"/>
+          <circle cx="14" cy="12" r="10.5" fill="var(--accent-deep)"/>
+          <circle cx="14" cy="10.5" r="9.5" fill="var(--accent)"/>
+          <ellipse cx="10" cy="6.5" rx="3" ry="1.9" fill="#fff" opacity="0.55" transform="rotate(-25 10 6.5)"/>
+        </svg>
+        <div class="stk-note curl-lg">
+          <div class="id mono">DWG-01</div>
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="type">Web App</div>
+          <div class="mono stack">React · Node · Maps API</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+        <div class="curl-flap"></div>
+      </div>
+      <div class="stk-wrap" style="transform:rotate(1.3deg);">
+        <svg class="v3-pin pin-svg" width="28" height="38" viewBox="0 0 28 38" fill="none">
+          <line x1="14" y1="18" x2="14" y2="31" stroke="#9A9A9A" stroke-width="1.7" stroke-linecap="round"/>
+          <circle cx="14" cy="12" r="10.5" fill="var(--accent-deep)"/>
+          <circle cx="14" cy="10.5" r="9.5" fill="var(--accent)"/>
+          <ellipse cx="10" cy="6.5" rx="3" ry="1.9" fill="#fff" opacity="0.55" transform="rotate(-25 10 6.5)"/>
+        </svg>
+        <div class="stk-note curl-lg">
+          <div class="id mono">DWG-02</div>
+          <h3>KeyQuest</h3>
+          <div class="type">Typing &amp; Riddle Game</div>
+          <div class="mono stack">JavaScript · CSS</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+        <div class="curl-flap"></div>
+      </div>
+      <div class="stk-wrap" style="transform:rotate(-1deg);">
+        <svg class="v3-pin pin-svg" width="28" height="38" viewBox="0 0 28 38" fill="none">
+          <line x1="14" y1="18" x2="14" y2="31" stroke="#9A9A9A" stroke-width="1.7" stroke-linecap="round"/>
+          <circle cx="14" cy="12" r="10.5" fill="var(--accent-deep)"/>
+          <circle cx="14" cy="10.5" r="9.5" fill="var(--accent)"/>
+          <ellipse cx="10" cy="6.5" rx="3" ry="1.9" fill="#fff" opacity="0.55" transform="rotate(-25 10 6.5)"/>
+        </svg>
+        <div class="stk-note curl-lg">
+          <div class="id mono">DWG-03</div>
+          <h3>Task Manager</h3>
+          <div class="type">Application</div>
+          <div class="mono stack">React · Firebase</div>
+          <div class="mono status" style="color:var(--ink-soft);">BUILT</div>
+        </div>
+        <div class="curl-flap"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STYLE 4 — Warm Tint Paper ============ -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">04</span><h2 class="display">Warm Tint Paper</h2></div>
+    <p class="style-desc">Closer to the yellow note in your reference — the paper itself is tinted warm (a soft wash of your accent orange, not literal yellow) instead of staying neutral cream. Pin sits slightly off-centre.</p>
+    <div class="row">
+      <div class="stk-wrap" style="transform:rotate(-1.3deg);">
+        <svg class="v4-pin pin-svg" width="26" height="34" viewBox="0 0 26 34" fill="none">
+          <line x1="13" y1="16" x2="13" y2="28" stroke="#9A9A9A" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="13" cy="11" r="9.5" fill="var(--accent-deep)"/>
+          <circle cx="13" cy="9.5" r="8.5" fill="var(--accent)"/>
+          <ellipse cx="9.5" cy="6" rx="2.6" ry="1.7" fill="#fff" opacity="0.55" transform="rotate(-25 9.5 6)"/>
+        </svg>
+        <div class="stk-note v4-note curl-sm">
+          <div class="id mono">DWG-01</div>
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="type">Web App</div>
+          <div class="mono stack">React · Node · Maps API</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="stk-wrap" style="transform:rotate(1.5deg);">
+        <svg class="v4-pin pin-svg" width="26" height="34" viewBox="0 0 26 34" fill="none">
+          <line x1="13" y1="16" x2="13" y2="28" stroke="#9A9A9A" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="13" cy="11" r="9.5" fill="var(--accent-deep)"/>
+          <circle cx="13" cy="9.5" r="8.5" fill="var(--accent)"/>
+          <ellipse cx="9.5" cy="6" rx="2.6" ry="1.7" fill="#fff" opacity="0.55" transform="rotate(-25 9.5 6)"/>
+        </svg>
+        <div class="stk-note v4-note curl-sm">
+          <div class="id mono">DWG-02</div>
+          <h3>KeyQuest</h3>
+          <div class="type">Typing &amp; Riddle Game</div>
+          <div class="mono stack">JavaScript · CSS</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="stk-wrap" style="transform:rotate(-0.8deg);">
+        <svg class="v4-pin pin-svg" width="26" height="34" viewBox="0 0 26 34" fill="none">
+          <line x1="13" y1="16" x2="13" y2="28" stroke="#9A9A9A" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="13" cy="11" r="9.5" fill="var(--accent-deep)"/>
+          <circle cx="13" cy="9.5" r="8.5" fill="var(--accent)"/>
+          <ellipse cx="9.5" cy="6" rx="2.6" ry="1.7" fill="#fff" opacity="0.55" transform="rotate(-25 9.5 6)"/>
+        </svg>
+        <div class="stk-note v4-note curl-sm">
+          <div class="id mono">DWG-03</div>
+          <h3>Task Manager</h3>
+          <div class="type">Application</div>
+          <div class="mono stack">React · Firebase</div>
+          <div class="mono status" style="color:var(--ink-soft);">BUILT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STYLE 5 — Mini Pin, Compact ============ -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">05</span><h2 class="display">Mini Pin, Compact</h2></div>
+    <p class="style-desc">Matches your small yellow note — a tighter card, a noticeably smaller pin, almost no curl. Reads calmer and denser, good if the Work grid grows past six projects.</p>
+    <div class="row">
+      <div class="stk-wrap" style="transform:rotate(-1.1deg);">
+        <svg class="v5-pin pin-svg" width="20" height="26" viewBox="0 0 20 26" fill="none">
+          <line x1="10" y1="12" x2="10" y2="21" stroke="#9A9A9A" stroke-width="1.4" stroke-linecap="round"/>
+          <circle cx="10" cy="8" r="7.2" fill="var(--accent-deep)"/>
+          <circle cx="10" cy="7" r="6.4" fill="var(--accent)"/>
+          <ellipse cx="7.2" cy="4.5" rx="2" ry="1.3" fill="#fff" opacity="0.55" transform="rotate(-25 7.2 4.5)"/>
+        </svg>
+        <div class="stk-note v5-note curl-sm">
+          <div class="id mono">DWG-01</div>
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="type">Web App</div>
+          <div class="mono stack">React · Node · Maps API</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="stk-wrap" style="transform:rotate(0.9deg);">
+        <svg class="v5-pin pin-svg" width="20" height="26" viewBox="0 0 20 26" fill="none">
+          <line x1="10" y1="12" x2="10" y2="21" stroke="#9A9A9A" stroke-width="1.4" stroke-linecap="round"/>
+          <circle cx="10" cy="8" r="7.2" fill="var(--accent-deep)"/>
+          <circle cx="10" cy="7" r="6.4" fill="var(--accent)"/>
+          <ellipse cx="7.2" cy="4.5" rx="2" ry="1.3" fill="#fff" opacity="0.55" transform="rotate(-25 7.2 4.5)"/>
+        </svg>
+        <div class="stk-note v5-note curl-sm">
+          <div class="id mono">DWG-02</div>
+          <h3>KeyQuest</h3>
+          <div class="type">Typing &amp; Riddle Game</div>
+          <div class="mono stack">JavaScript · CSS</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="stk-wrap" style="transform:rotate(-0.6deg);">
+        <svg class="v5-pin pin-svg" width="20" height="26" viewBox="0 0 20 26" fill="none">
+          <line x1="10" y1="12" x2="10" y2="21" stroke="#9A9A9A" stroke-width="1.4" stroke-linecap="round"/>
+          <circle cx="10" cy="8" r="7.2" fill="var(--accent-deep)"/>
+          <circle cx="10" cy="7" r="6.4" fill="var(--accent)"/>
+          <ellipse cx="7.2" cy="4.5" rx="2" ry="1.3" fill="#fff" opacity="0.55" transform="rotate(-25 7.2 4.5)"/>
+        </svg>
+        <div class="stk-note v5-note curl-sm">
+          <div class="id mono">DWG-03</div>
+          <h3>Task Manager</h3>
+          <div class="type">Application</div>
+          <div class="mono stack">React · Firebase</div>
+          <div class="mono status" style="color:var(--ink-soft);">BUILT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STYLE 6 — Board Scatter ============ -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">06</span><h2 class="display">Board Scatter</h2></div>
+    <p class="style-desc">Same note and pin, pushed further — stronger, uneven rotation per card and a deeper shadow so the grid reads like notes actually scattered and pinned by hand, not laid out in a tidy row.</p>
+    <div class="row">
+      <div class="stk-wrap" style="transform:rotate(-4deg);">
+        <svg class="v6-pin pin-svg" style="left:24px;" width="30" height="40" viewBox="0 0 30 40" fill="none">
+          <line x1="15" y1="19" x2="15" y2="33" stroke="#9A9A9A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="15" cy="13" r="11" fill="var(--accent-deep)"/>
+          <circle cx="15" cy="11" r="10" fill="var(--accent)"/>
+          <ellipse cx="10.5" cy="7" rx="3.2" ry="2" fill="#fff" opacity="0.55" transform="rotate(-25 10.5 7)"/>
+        </svg>
+        <div class="stk-note v6-note curl-sm">
+          <div class="id mono">DWG-01</div>
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="type">Web App</div>
+          <div class="mono stack">React · Node · Maps API</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="stk-wrap" style="transform:rotate(3.2deg);margin-top:22px;">
+        <svg class="v6-pin pin-svg" style="right:20px;" width="30" height="40" viewBox="0 0 30 40" fill="none">
+          <line x1="15" y1="19" x2="15" y2="33" stroke="#9A9A9A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="15" cy="13" r="11" fill="var(--accent-deep)"/>
+          <circle cx="15" cy="11" r="10" fill="var(--accent)"/>
+          <ellipse cx="10.5" cy="7" rx="3.2" ry="2" fill="#fff" opacity="0.55" transform="rotate(-25 10.5 7)"/>
+        </svg>
+        <div class="stk-note v6-note curl-sm">
+          <div class="id mono">DWG-02</div>
+          <h3>KeyQuest</h3>
+          <div class="type">Typing &amp; Riddle Game</div>
+          <div class="mono stack">JavaScript · CSS</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="stk-wrap" style="transform:rotate(-2.4deg);">
+        <svg class="v6-pin pin-svg" style="left:50%;transform:translateX(-50%);" width="30" height="40" viewBox="0 0 30 40" fill="none">
+          <line x1="15" y1="19" x2="15" y2="33" stroke="#9A9A9A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="15" cy="13" r="11" fill="var(--accent-deep)"/>
+          <circle cx="15" cy="11" r="10" fill="var(--accent)"/>
+          <ellipse cx="10.5" cy="7" rx="3.2" ry="2" fill="#fff" opacity="0.55" transform="rotate(-25 10.5 7)"/>
+        </svg>
+        <div class="stk-note v6-note curl-sm">
+          <div class="id mono">DWG-03</div>
+          <h3>Task Manager</h3>
+          <div class="type">Application</div>
+          <div class="mono stack">React · Firebase</div>
+          <div class="mono status" style="color:var(--ink-soft);">BUILT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STYLE 7 — Taped Corners ============ -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">07</span><h2 class="display">Taped Corners</h2></div>
+    <p class="style-desc">Built from your "Paper with sellotaped corners" code — recoloured to your cream/ink palette, with the diagonal fold-line gradient from that reference kept as a subtle paper texture. No pin here: the note is held down by tape instead, as a genuine alternative to pinning rather than a variation on it.</p>
+    <div class="row">
+      <div class="stk-wrap" style="transform:rotate(-1.4deg);">
+        <div class="tp-note">
+          <div class="tp-tape left"></div>
+          <div class="tp-tape right"></div>
+          <div class="id mono">DWG-01</div>
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="type">Web App</div>
+          <div class="mono stack">React · Node · Maps API</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="stk-wrap" style="transform:rotate(1.1deg);">
+        <div class="tp-note">
+          <div class="tp-tape left"></div>
+          <div class="tp-tape right"></div>
+          <div class="id mono">DWG-02</div>
+          <h3>KeyQuest</h3>
+          <div class="type">Typing &amp; Riddle Game</div>
+          <div class="mono stack">JavaScript · CSS</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="stk-wrap" style="transform:rotate(-0.7deg);">
+        <div class="tp-note">
+          <div class="tp-tape left"></div>
+          <div class="tp-tape right"></div>
+          <div class="id mono">DWG-03</div>
+          <h3>Task Manager</h3>
+          <div class="type">Application</div>
+          <div class="mono stack">React · Firebase</div>
+          <div class="mono status" style="color:var(--ink-soft);">BUILT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STYLE 8 — Pinned + Lifted Shadow ============ -->
+  <section class="style-block">
+    <div class="style-head"><span class="num mono">08</span><h2 class="display">Pinned + Lifted Shadow</h2></div>
+    <p class="style-desc">Shadow technique from your "Pure CSS Paper Lift Effect" code — two angled, blurred shadow patches instead of a flat box-shadow, so the card reads as genuinely lifted off the page rather than just outlined. Pin is your real <code class="mono">just pin .png</code> asset, not a hand-drawn SVG. Shadow tightens on hover.</p>
+    <div class="row">
+      <div class="lift-wrap" style="transform:rotate(-1.2deg);">
+        <img class="lift-pin" src="assests/just pin .png" alt="pin">
+        <div class="lift-note">
+          <div class="id mono">DWG-01</div>
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="type">Web App</div>
+          <div class="mono stack">React · Node · Maps API</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="lift-wrap" style="transform:rotate(1.3deg);">
+        <img class="lift-pin" src="assests/just pin .png" alt="pin">
+        <div class="lift-note">
+          <div class="id mono">DWG-02</div>
+          <h3>KeyQuest</h3>
+          <div class="type">Typing &amp; Riddle Game</div>
+          <div class="mono stack">JavaScript · CSS</div>
+          <div class="mono status" style="color:var(--accent);">LIVE</div>
+        </div>
+      </div>
+      <div class="lift-wrap" style="transform:rotate(-0.9deg);">
+        <img class="lift-pin" src="assests/just pin .png" alt="pin">
+        <div class="lift-note">
+          <div class="id mono">DWG-03</div>
+          <h3>Task Manager</h3>
+          <div class="type">Application</div>
+          <div class="mono stack">React · Firebase</div>
+          <div class="mono status" style="color:var(--ink-soft);">BUILT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>
