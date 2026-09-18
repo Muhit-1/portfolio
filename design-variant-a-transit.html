@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Variant A — Transit Line · Design Template</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  /* ============================================================
+     VARIANT A — "TRANSIT LINE"
+     Concept: your career as a two-line route map. Grounded in
+     Dhaka Bus Navigator. Line work, nodes, legend — airy and
+     diagrammatic. Theme tokens unchanged.
+     DESIGN TEMPLATE ONLY — nothing here is wired into the site.
+     ============================================================ */
+
+  :root{
+    --bg:#F7F3EB; --panel:#FFFDF8; --ink:#221E1A; --ink-soft:#6B6157;
+    --line:rgba(34,30,26,0.16); --grid-minor:rgba(34,30,26,0.05);
+    --accent:#FF5C00; --accent-deep:#C73700;
+    --rail:#FF5C00;          /* Line 1 — Work */
+    --rail-2:#6B6157;        /* Line 2 — Study */
+    --shadow:0 10px 26px rgba(34,30,26,0.10);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1B1815; --panel:#252019; --ink:#F3ECDF; --ink-soft:#A79C8C;
+      --line:rgba(243,236,223,0.16); --grid-minor:rgba(243,236,223,0.05);
+      --accent:#FF7A3D; --accent-deep:#FFB489;
+      --rail:#FF7A3D; --rail-2:#A79C8C;
+      --shadow:0 10px 26px rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1B1815; --panel:#252019; --ink:#F3ECDF; --ink-soft:#A79C8C;
+    --line:rgba(243,236,223,0.16); --grid-minor:rgba(243,236,223,0.05);
+    --accent:#FF7A3D; --accent-deep:#FFB489;
+    --rail:#FF7A3D; --rail-2:#A79C8C;
+    --shadow:0 10px 26px rgba(0,0,0,0.4);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
+  .disp{font-family:'Space Grotesk',sans-serif;}
+
+  /* faint grid paper, kept from your theme but pushed back */
+  .paper{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(var(--grid-minor) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
+    background-size:22px 22px, 22px 22px;
+  }
+  .page{position:relative; z-index:1; max-width:1180px; margin:0 auto; padding:0 28px 0;}
+
+  /* ---------- template banner ---------- */
+  .tpl-note{
+    border-bottom:1px solid var(--line); padding:14px 0; margin-bottom:34px;
+    display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--ink-soft);
+  }
+  .tpl-note b{color:var(--accent); font-weight:600;}
+
+  /* ---------- the rail: signature element ---------- */
+  .rail{position:relative; padding-left:78px;}
+  .rail::before{
+    content:""; position:absolute; left:22px; top:6px; bottom:120px;
+    width:3px; background:var(--rail); border-radius:2px;
+  }
+  .stn{position:relative; padding-bottom:96px;}
+  .stn::before{
+    content:""; position:absolute; left:-62px; top:4px;
+    width:17px; height:17px; border-radius:50%;
+    background:var(--panel); border:3px solid var(--rail); box-sizing:border-box;
+  }
+  /* interchange node — double ring, used where two lines meet */
+  .stn.interchange::before{
+    width:21px; height:21px; left:-64px; border-width:4px;
+  }
+  /* current node — filled */
+  .stn.current::before{ background:var(--rail); }
+
+  .stn-label{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-soft); margin-bottom:10px; display:block;
+  }
+  .stn-title{
+    font-family:'Space Grotesk',sans-serif; font-weight:700;
+    font-size:clamp(1.5rem,2.8vw,2.05rem); line-height:1.1;
+    margin:0 0 22px; letter-spacing:-.01em;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{display:grid; grid-template-columns:1fr 300px; gap:56px; align-items:center; padding-bottom:104px;}
+  .hero-line{
+    display:flex; align-items:center; gap:12px; margin-bottom:22px;
+  }
+  .hero-line .swatch{width:34px; height:5px; border-radius:3px; background:var(--rail); flex:none;}
+  .hero-line span{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-soft);
+  }
+  .hero h1{
+    font-family:'Space Grotesk',sans-serif; font-weight:700;
+    font-size:clamp(2.6rem,6.4vw,4.6rem); line-height:.97; letter-spacing:-.025em;
+    margin:0 0 20px;
+  }
+  .hero h1 em{font-style:normal; color:var(--accent);}
+  .hero p{font-size:16.5px; color:var(--ink-soft); max-width:46ch; margin:0 0 30px;}
+  .btn-row{display:flex; gap:12px; flex-wrap:wrap;}
+  .btn{
+    font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.1em;
+    padding:14px 22px; border:1.5px solid var(--ink); text-decoration:none;
+    display:inline-flex; align-items:center; gap:9px; border-radius:2px;
+    transition:background .18s ease, color .18s ease, border-color .18s ease;
+  }
+  .btn-solid{background:var(--accent); border-color:var(--accent); color:#fff;}
+  .btn-solid:hover{background:var(--accent-deep); border-color:var(--accent-deep);}
+  .btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
+  .hero-photo{width:100%; display:block; filter:drop-shadow(0 14px 26px rgba(34,30,26,.2));}
+
+  /* ---------- line legend ---------- */
+  .legend{
+    border:1px solid var(--line); border-radius:3px; background:var(--panel);
+    padding:24px 26px; display:grid; grid-template-columns:repeat(4,1fr); gap:26px;
+  }
+  .legend h4{
+    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-soft); margin:0 0 12px; font-weight:500;
+  }
+  .legend ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px;}
+  .legend li{display:flex; align-items:center; gap:10px; font-size:13px;}
+  .key-line{width:22px; height:4px; border-radius:2px; flex:none;}
+  .key-node{width:13px; height:13px; border-radius:50%; border:3px solid var(--rail); background:var(--panel); flex:none; box-sizing:border-box;}
+  .key-node.fill{background:var(--rail);}
+  .key-node.xchg{width:15px; height:15px; border-width:4px;}
+
+  /* ---------- prose ---------- */
+  .prose p{font-size:15.5px; color:var(--ink-soft); max-width:64ch; margin:0 0 16px;}
+  .prose strong{color:var(--ink); font-weight:600;}
+
+  /* ---------- stats ---------- */
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line); margin-top:32px;}
+  .stat{padding:22px 22px 22px 0; border-right:1px solid var(--line);}
+  .stat:last-child{border-right:none;}
+  .stat b{
+    display:block; font-family:'Space Grotesk',sans-serif; font-weight:700;
+    font-size:2.1rem; line-height:1; color:var(--accent); letter-spacing:-.02em;
+  }
+  .stat span{
+    display:block; margin-top:8px; font-family:'JetBrains Mono',monospace;
+    font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft);
+  }
+
+  /* ---------- services ---------- */
+  .svc{list-style:none; margin:0; padding:0; border-top:1px solid var(--line);}
+  .svc li{
+    display:grid; grid-template-columns:64px 1fr auto; gap:20px; align-items:baseline;
+    padding:20px 0; border-bottom:1px solid var(--line);
+  }
+  .svc .code{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent); letter-spacing:.08em;}
+  .svc .name{font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:16.5px;}
+  .svc .desc{color:var(--ink-soft); font-size:13.5px; text-align:right; max-width:40ch;}
+
+  /* ---------- destinations (work) ---------- */
+  .dests{display:grid; grid-template-columns:1fr 1fr; gap:0 40px;}
+  .dest{
+    display:block; text-decoration:none; padding:20px 0;
+    border-bottom:1px solid var(--line); position:relative;
+    transition:padding-left .2s ease;
+  }
+  .dest::before{
+    content:""; position:absolute; left:-8px; top:27px; width:9px; height:9px;
+    border-radius:50%; background:var(--rail); opacity:0; transition:opacity .2s ease;
+  }
+  .dest:hover{padding-left:14px;}
+  .dest:hover::before{opacity:1;}
+  .dest-top{display:flex; justify-content:space-between; align-items:baseline; gap:14px; margin-bottom:5px;}
+  .dest-code{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--accent); letter-spacing:.08em;}
+  .dest-status{font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.1em; padding:3px 8px; border:1px solid currentColor; border-radius:2px;}
+  .is-live{color:var(--accent);}
+  .is-built{color:var(--ink-soft);}
+  .dest h3{font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:600; margin:0 0 5px;}
+  .dest .stack{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-soft);}
+
+  .seeall{
+    margin-top:34px; display:flex; justify-content:space-between; align-items:center;
+    gap:20px; flex-wrap:wrap;
+    background:var(--accent); color:#fff; text-decoration:none;
+    padding:26px 30px; border-radius:3px;
+    transition:background .2s ease;
+  }
+  .seeall:hover{background:var(--accent-deep);}
+  .seeall .sa-label{font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; opacity:.8;}
+  .seeall .sa-title{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(1.2rem,2.4vw,1.6rem); margin-top:4px;}
+  .seeall .sa-arrow{font-size:1.7rem; line-height:1;}
+
+  /* ---------- the two-line diagram: SIGNATURE ---------- */
+  .diagram{
+    background:var(--panel); border:1px solid var(--line); border-radius:3px;
+    padding:34px 30px 30px;
+  }
+  .dg-key{display:flex; gap:26px; flex-wrap:wrap; margin-bottom:30px;}
+  .dg-key div{display:flex; align-items:center; gap:9px; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft);}
+  .dg-rows{position:relative; padding-left:74px;}
+  /* two parallel tracks */
+  .track{position:absolute; top:8px; bottom:8px; width:3px; border-radius:2px;}
+  .track-work{left:14px; background:var(--rail);}
+  .track-study{left:34px; background:var(--rail-2);}
+  .dg-row{position:relative; padding:0 0 30px; min-height:62px;}
+  .dg-row:last-child{padding-bottom:0;}
+  .dot{position:absolute; width:15px; height:15px; border-radius:50%; background:var(--panel); box-sizing:border-box; top:3px;}
+  .dot-work{left:-66px; border:3px solid var(--rail);}
+  .dot-study{left:-46px; border:3px solid var(--rail-2);}
+  .dot.is-here{background:var(--rail);}
+  .dg-yr{font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.08em; color:var(--accent); display:block; margin-bottom:4px;}
+  .dg-ttl{font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15.5px;}
+  .dg-org{color:var(--ink-soft); font-size:13px;}
+  .dg-note{color:var(--ink-soft); font-size:12.5px; margin-top:5px; max-width:52ch;}
+  .xchg-band{
+    position:absolute; left:-74px; right:0; border-radius:3px;
+    background:linear-gradient(90deg, rgba(255,92,0,.07), transparent 72%);
+    pointer-events:none;
+  }
+
+  /* ---------- now / availability ---------- */
+  .now{
+    display:grid; grid-template-columns:1fr 1fr; gap:0;
+    border:1px solid var(--line); border-radius:3px; overflow:hidden;
+  }
+  .now-cell{padding:28px 30px; background:var(--panel);}
+  .now-cell + .now-cell{border-left:1px solid var(--line);}
+  .now-cell h4{
+    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-soft); margin:0 0 14px; font-weight:500;
+  }
+  .now-cell p{margin:0; font-size:14.5px; color:var(--ink-soft);}
+  .now-cell p strong{color:var(--ink);}
+  .avail{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+  .avail i{
+    width:9px; height:9px; border-radius:50%; background:var(--accent); flex:none;
+    box-shadow:0 0 0 4px rgba(255,92,0,.18);
+  }
+  .avail b{font-family:'Space Grotesk',sans-serif; font-size:16px;}
+
+  /* ---------- reference ---------- */
+  .quote{
+    background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--accent);
+    border-radius:3px; padding:30px 34px;
+  }
+  .quote blockquote{
+    margin:0 0 18px; font-family:'Space Grotesk',sans-serif; font-weight:500;
+    font-size:clamp(1.05rem,2vw,1.3rem); line-height:1.5;
+  }
+  .quote cite{font-style:normal; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft);}
+  .placeholder{
+    display:inline-block; margin-left:10px; padding:2px 8px; border-radius:2px;
+    background:rgba(255,92,0,.12); color:var(--accent);
+    font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.08em;
+  }
+
+  /* ---------- terminus / contact ---------- */
+  .terminus{padding-bottom:40px;}
+  .term-mail{
+    display:inline-block; text-decoration:none; margin:6px 0 30px;
+    font-family:'Space Grotesk',sans-serif; font-weight:700; letter-spacing:-.02em;
+    font-size:clamp(1.5rem,4.6vw,3rem); line-height:1.1;
+    border-bottom:3px solid var(--accent); padding-bottom:4px;
+  }
+  .term-mail:hover{color:var(--accent);}
+  .term-links{display:flex; gap:26px; flex-wrap:wrap;}
+  .term-links a{font-family:'JetBrains Mono',monospace; font-size:13px; text-decoration:none; color:var(--ink-soft);}
+  .term-links a:hover{color:var(--accent);}
+
+  footer{
+    border-top:1px solid var(--line); margin-top:20px; padding:24px 0 60px;
+    display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.08em;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr; gap:36px;}
+    .hero-photo{max-width:260px;}
+    .legend{grid-template-columns:1fr 1fr; gap:22px;}
+    .stats{grid-template-columns:1fr 1fr;}
+    .stat{border-bottom:1px solid var(--line);}
+    .stat:nth-child(2n){border-right:none;}
+    .dests{grid-template-columns:1fr; gap:0;}
+    .now{grid-template-columns:1fr;}
+    .now-cell + .now-cell{border-left:none; border-top:1px solid var(--line);}
+    .svc li{grid-template-columns:52px 1fr; gap:14px;}
+    .svc .desc{text-align:left; grid-column:2; max-width:none;}
+  }
+  @media (max-width:620px){
+    .page{padding:0 18px;}
+    .rail{padding-left:44px;}
+    .rail::before{left:12px;}
+    .stn::before{left:-39px; width:15px; height:15px;}
+    .stn.interchange::before{left:-40px; width:17px; height:17px;}
+    .stn{padding-bottom:70px;}
+    .legend{grid-template-columns:1fr;}
+    .dg-rows{padding-left:58px;}
+    .track-work{left:10px;} .track-study{left:28px;}
+    .dot-work{left:-51px;} .dot-study{left:-33px;}
+    .quote{padding:24px 22px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important; animation:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="paper"></div>
+<div class="page">
+
+  <div class="tpl-note">
+    <span>Design template — <b>Variant A · Transit Line</b></span>
+    <span>Not wired into the site</span>
+  </div>
+
+  <div class="rail">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero stn current">
+      <div>
+        <div class="hero-line">
+          <span class="swatch"></span>
+          <span>Line 1 — Full-stack development · Dhaka</span>
+        </div>
+        <h1>Muhit<br>Rahman<em>.</em></h1>
+        <p>I build release-ready products end to end — APIs, backend integration, and the frontend that sits on top of them. Currently a Junior Software Engineer at SAMTrek.</p>
+        <div class="btn-row">
+          <a class="btn btn-solid" href="mailto:senanovi908@gmail.com">Start a project →</a>
+          <a class="btn btn-ghost" href="#">Download CV ↓</a>
+        </div>
+      </div>
+      <img class="hero-photo" src="/img/heropic.png" alt="Portrait of Muhit Rahman">
+    </section>
+
+    <!-- ============ LEGEND ============ -->
+    <section class="stn">
+      <span class="stn-label">Legend</span>
+      <h2 class="stn-title">How to read this page</h2>
+      <div class="legend">
+        <div>
+          <h4>Lines</h4>
+          <ul>
+            <li><span class="key-line" style="background:var(--rail)"></span> Work</li>
+            <li><span class="key-line" style="background:var(--rail-2)"></span> Study</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Stops</h4>
+          <ul>
+            <li><span class="key-node"></span> Station</li>
+            <li><span class="key-node xchg"></span> Interchange</li>
+            <li><span class="key-node fill"></span> Current</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Core stack</h4>
+          <ul>
+            <li>React · Node · Firebase</li>
+            <li>Flutter · Docker</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Based</h4>
+          <ul>
+            <li>Mirpur, Dhaka</li>
+            <li>Open to remote</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="stn">
+      <span class="stn-label">Stop 01 — Origin</span>
+      <h2 class="stn-title">Where I started</h2>
+      <div class="prose">
+        <p>I'm a full-stack developer based in Mirpur, Dhaka. At <strong>SAMTrek</strong> I work across the whole stack — designing APIs, wiring up backend integrations, and building the interfaces that sit on top of them.</p>
+        <p>I'm finishing a <strong>B.Sc. in Computer Science at BUBT</strong>, and most of what I ship leans on React, Node and Firebase, with Flutter for mobile and a growing habit of deploying things properly with Docker. I like software that's clean enough to hand off to someone else without an explanation.</p>
+        <div class="stats">
+          <div class="stat"><b>6</b><span>Projects shipped</span></div>
+          <div class="stat"><b>3</b><span>Live in production</span></div>
+          <div class="stat"><b>4</b><span>Years studying CS</span></div>
+          <div class="stat"><b>8+</b><span>Tools in daily use</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SERVICES — new ============ -->
+    <section class="stn interchange">
+      <span class="stn-label">Stop 02 — Interchange</span>
+      <h2 class="stn-title">What I can take on</h2>
+      <ul class="svc">
+        <li><span class="code mono">S-01</span><span class="name">Full-stack web development</span><span class="desc">React front ends on Node or Firebase back ends</span></li>
+        <li><span class="code mono">S-02</span><span class="name">Backend &amp; API development</span><span class="desc">REST APIs, auth, third-party integration</span></li>
+        <li><span class="code mono">S-03</span><span class="name">Mobile app development</span><span class="desc">Cross-platform builds in Flutter</span></li>
+        <li><span class="code mono">S-04</span><span class="name">Custom software solutions</span><span class="desc">Internal tools built around how you actually work</span></li>
+        <li><span class="code mono">S-05</span><span class="name">Optimization &amp; bug fixing</span><span class="desc">Auditing and repairing sites that already exist</span></li>
+        <li><span class="code mono">S-06</span><span class="name">Deployment &amp; cloud setup</span><span class="desc">Docker, CI pipelines, getting it live and stable</span></li>
+      </ul>
+    </section>
+
+    <!-- ============ WORK ============ -->
+    <section class="stn">
+      <span class="stn-label">Stop 03 — Destinations</span>
+      <h2 class="stn-title">Selected work</h2>
+      <div class="dests">
+        <a class="dest" href="#">
+          <div class="dest-top"><span class="dest-code">DWG-01</span><span class="dest-status mono is-live">LIVE</span></div>
+          <h3>Dhaka Bus Navigator</h3>
+          <div class="stack">React · Node · Maps API</div>
+        </a>
+        <a class="dest" href="#">
+          <div class="dest-top"><span class="dest-code">DWG-02</span><span class="dest-status mono is-live">LIVE</span></div>
+          <h3>KeyQuest</h3>
+          <div class="stack">JavaScript · CSS</div>
+        </a>
+        <a class="dest" href="#">
+          <div class="dest-top"><span class="dest-code">DWG-03</span><span class="dest-status mono is-built">BUILT</span></div>
+          <h3>Task Manager</h3>
+          <div class="stack">React · Firebase</div>
+        </a>
+        <a class="dest" href="#">
+          <div class="dest-top"><span class="dest-code">DWG-04</span><span class="dest-status mono is-built">BUILT</span></div>
+          <h3>Music Player App</h3>
+          <div class="stack">Flutter</div>
+        </a>
+        <a class="dest" href="#">
+          <div class="dest-top"><span class="dest-code">DWG-05</span><span class="dest-status mono is-built">BUILT</span></div>
+          <h3>Moisture Detection &amp; Auto-Irrigation</h3>
+          <div class="stack">Arduino · Sensors</div>
+        </a>
+        <a class="dest" href="#">
+          <div class="dest-top"><span class="dest-code">DWG-06</span><span class="dest-status mono is-live">LIVE</span></div>
+          <h3>Nonograms</h3>
+          <div class="stack">JavaScript</div>
+        </a>
+      </div>
+
+      <!-- NEW: the hand-off to your second site -->
+      <a class="seeall" href="#">
+        <span>
+          <span class="sa-label">End of line — continues on</span>
+          <span class="sa-title">See all projects, with write-ups</span>
+        </span>
+        <span class="sa-arrow">→</span>
+      </a>
+    </section>
+
+    <!-- ============ EXPERIENCE — SIGNATURE ============ -->
+    <section class="stn interchange">
+      <span class="stn-label">Stop 04 — The line</span>
+      <h2 class="stn-title">Work and study, running parallel</h2>
+      <div class="diagram">
+        <div class="dg-key">
+          <div><span class="key-line" style="background:var(--rail)"></span> Line 1 — Work</div>
+          <div><span class="key-line" style="background:var(--rail-2)"></span> Line 2 — Study</div>
+          <div><span class="key-node fill"></span> You are here</div>
+        </div>
+        <div class="dg-rows">
+          <span class="track track-work"></span>
+          <span class="track track-study"></span>
+
+          <div class="dg-row">
+            <span class="dot dot-work is-here"></span>
+            <span class="dg-yr mono">2026 — PRESENT</span>
+            <div class="dg-ttl">Junior Software Engineer</div>
+            <div class="dg-org">SAMTrek</div>
+            <p class="dg-note">APIs, backend integration and frontend implementation for release-ready products.</p>
+          </div>
+
+          <div class="dg-row">
+            <span class="dot dot-study"></span>
+            <span class="dg-yr mono">2022 — 2026</span>
+            <div class="dg-ttl">B.Sc. Computer Science</div>
+            <div class="dg-org">BUBT</div>
+            <p class="dg-note">Software development, data structures, databases. Overlaps the first year of full-time work — the interchange on this map.</p>
+          </div>
+
+          <div class="dg-row">
+            <span class="dot dot-study"></span>
+            <span class="dg-yr mono">2018 — 2020</span>
+            <div class="dg-ttl">Higher Secondary Certificate</div>
+            <div class="dg-org">Science group</div>
+            <p class="dg-note">Mathematics, physics, ICT.</p>
+          </div>
+
+          <div class="dg-row">
+            <span class="dot dot-study"></span>
+            <span class="dg-yr mono">2016 — 2017</span>
+            <div class="dg-ttl">Secondary School Certificate</div>
+            <div class="dg-org">Science group</div>
+            <p class="dg-note">Foundation coursework.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ NOW — new ============ -->
+    <section class="stn">
+      <span class="stn-label">Stop 05 — Next stop</span>
+      <h2 class="stn-title">What I'm on right now</h2>
+      <div class="now">
+        <div class="now-cell">
+          <h4>Availability</h4>
+          <div class="avail"><i></i><b>Open to freelance work</b></div>
+          <p>Taking on small-to-mid builds alongside my role at SAMTrek. Usually replies within a day.</p>
+        </div>
+        <div class="now-cell">
+          <h4>Currently learning</h4>
+          <p><strong>DevOps and cloud infrastructure</strong> — container orchestration, CI pipelines, and getting deployments boring and repeatable.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ REFERENCE — new ============ -->
+    <section class="stn">
+      <span class="stn-label">Stop 06 — Reference</span>
+      <h2 class="stn-title">What it's like to work with me</h2>
+      <div class="quote">
+        <blockquote>“Add a line here from a manager, client, or teammate. Two sentences on what you shipped and how you worked is enough.”</blockquote>
+        <cite>Name, Role — Company <span class="placeholder">PLACEHOLDER</span></cite>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="stn terminus">
+      <span class="stn-label">Terminus</span>
+      <h2 class="stn-title">Let's build something</h2>
+      <a class="term-mail" href="mailto:senanovi908@gmail.com">senanovi908@gmail.com</a>
+      <div class="term-links">
+        <a href="https://github.com/muhit-1">GitHub ↗</a>
+        <a href="https://www.linkedin.com/in/muhit-rahman/">LinkedIn ↗</a>
+        <a href="#">All projects ↗</a>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Muhit Rahman</span>
+    <span>Dhaka, Bangladesh</span>
+  </footer>
+</div>
+</body>
+</html>
