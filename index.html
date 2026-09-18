@@ -27,7 +27,6 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4 6.5l8 6 8-6"/></svg>
     <span class="dock-label">Contact</span>
   </a>
-  <div class="dock-divider"></div>
   <button class="dock-item" id="theme-toggle" aria-label="Toggle color theme">
     <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.4M12 19.1v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/></svg>
     <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"/></svg>
@@ -37,12 +36,11 @@
 
 <main>
   <div class="wrap">
-    <div class="topline mono eyebrow">
-      <span>PORTFOLIO — DHAKA, BANGLADESH</span>
-      <span>REV. 2026</span>
-    </div>
-
     <header class="hero" id="top">
+      <div class="topline mono eyebrow">
+        <span>PORTFOLIO — DHAKA, BANGLADESH</span>
+        <span>REV. 2026</span>
+      </div>
       <div class="title-block">
         <div class="title-block-main">
           <div class="eyebrow mono">FULL-STACK DEVELOPER</div>
@@ -79,9 +77,12 @@
     </section>
 
     <section id="work">
-      <div class="section-head">
-        <div class="eyebrow mono">SELECTED WORK — PROJECT INDEX</div>
-        <h2 class="display">Pinned to the board</h2>
+      <div class="section-head work-head">
+        <div>
+          <div class="eyebrow mono">SELECTED WORK — PROJECT INDEX</div>
+          <h2 class="display">Pinned to the board</h2>
+        </div>
+        <a href="projects.html" class="btn btn-outline">VIEW MORE PROJECTS →</a>
       </div>
       <div class="work-grid" id="work-grid"></div>
     </section>
@@ -95,17 +96,34 @@
     </section>
 
     <section id="contact">
-      <div class="section-head">
-        <div class="eyebrow mono">CONTACT</div>
-        <h2 class="display">Let's build something</h2>
-      </div>
-      <div class="contact-wrap">
-        <div class="contact-links">
-          <a href="mailto:senanovi908@gmail.com">senanovi908@gmail.com</a>
-          <a href="https://github.com/muhit-1" target="_blank" rel="noopener">github.com/muhit-1</a>
-          <a href="https://www.linkedin.com/in/muhit-rahman/" target="_blank" rel="noopener">linkedin.com/in/muhit-rahman</a>
+      <div class="title-block postcard">
+        <div class="postcard-body">
+          <div class="eyebrow mono">CONTACT — POSTED FROM DHAKA</div>
+          <h2 class="display postcard-headline">Get in touch.</h2>
+          <p class="postcard-sub">Email, GitHub or LinkedIn — whichever's easiest. I reply to all of them.</p>
+          <div class="postcard-addr">
+            <div class="postcard-row">
+              <span class="postcard-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4 6.5l8 6 8-6"/></svg></span>
+              <span class="postcard-k mono">Email</span>
+              <a href="mailto:senanovi908@gmail.com" class="mono">senanovi908@gmail.com</a>
+            </div>
+            <div class="postcard-row">
+              <span class="postcard-ico postcard-ico-badge mono" aria-hidden="true">GH</span>
+              <span class="postcard-k mono">GitHub</span>
+              <a href="https://github.com/muhit-1" target="_blank" rel="noopener" class="mono">github.com/muhit-1</a>
+            </div>
+            <div class="postcard-row">
+              <span class="postcard-ico postcard-ico-badge mono" aria-hidden="true">in</span>
+              <span class="postcard-k mono">LinkedIn</span>
+              <a href="https://www.linkedin.com/in/muhit-rahman/" target="_blank" rel="noopener" class="mono">linkedin.com/in/muhit-rahman</a>
+            </div>
+          </div>
+          <a href="mailto:senanovi908@gmail.com" class="btn btn-solid postcard-cta">GET IN TOUCH →</a>
         </div>
-        <div class="stamp"><span>APPROVED<br>FOR<br>HIRE</span></div>
+        <div class="postcard-qr">
+          <div class="postcard-qr-frame"><span id="contact-qr"></span></div>
+          <div class="postcard-qr-caption mono">SCAN TO SAVE</div>
+        </div>
       </div>
     </section>
   </div>
@@ -118,6 +136,7 @@
   </footer>
 </main>
 
+<script src="/vendor/qrcode.min.js"></script>
 <script type="module" src="/src/main.js"></script>
 </body>
 </html>

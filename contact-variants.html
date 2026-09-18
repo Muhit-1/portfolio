@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact Section — Variants</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F7F3EB; --panel:#FFFDF8; --ink:#221E1A; --ink-soft:#6B6157;
+    --line:rgba(34,30,26,0.16); --line-strong:rgba(34,30,26,0.32);
+    --grid-minor:rgba(34,30,26,0.06); --grid-major:rgba(34,30,26,0.12);
+    --accent:#FF5C00; --accent-deep:#C73700;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
+  .display{font-family:'Space Grotesk',sans-serif;}
+  a{color:inherit;text-decoration:none;}
+  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(var(--grid-minor) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px),
+      linear-gradient(var(--grid-major) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-major) 1px, transparent 1px);
+    background-size: 18px 18px, 18px 18px, 90px 90px, 90px 90px;
+  }
+  .frame{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:64px 32px 0;}
+  .label{display:flex;align-items:baseline;gap:14px;margin-bottom:22px;}
+  .label .tag{font-size:11px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;border:1px solid var(--accent);padding:4px 10px;}
+  .label h2{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;margin:0;color:var(--ink-soft);font-weight:600;}
+  .stage{border:2px dashed var(--line-strong);padding:56px 48px;margin-bottom:96px;display:flex;justify-content:center;}
+  .note{max-width:1160px;margin:0 auto;padding:0 32px 24px;font-size:13px;color:var(--ink-soft);line-height:1.6;}
+
+  /* ============ VARIANT A — POSTCARD ============ */
+  .pc{width:100%;max-width:760px;background:var(--panel);border:1.5px solid var(--ink);position:relative;padding:38px 42px;}
+  .pc::before{content:"";position:absolute;inset:6px;border:1px solid var(--line-strong);pointer-events:none;}
+  .pc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+  .pc-eyebrow{font-size:11px;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;}
+  .pc-stamp{width:100px;height:100px;border:2px solid var(--accent);border-radius:2px;display:flex;align-items:center;justify-content:center;transform:rotate(2deg);flex-shrink:0;position:relative;padding:8px;background:#fff;}
+  .pc-stamp::before{content:"";position:absolute;inset:5px;border:1px dashed var(--accent);pointer-events:none;}
+  .pc-stamp #pc-qr{position:relative;z-index:1;line-height:0;}
+  .pc-stamp #pc-qr img, .pc-stamp #pc-qr canvas{display:block;width:76px;height:76px;}
+  .pc-caption{margin-top:6px;font-size:8px;letter-spacing:.08em;text-align:center;color:var(--accent);text-transform:uppercase;}
+  .pc-headline{font-size:clamp(1.8rem,3.4vw,2.6rem);margin:0 0 14px;line-height:1.08;}
+  .pc-sub{font-size:15px;color:var(--ink-soft);max-width:44ch;line-height:1.6;margin:0 0 30px;}
+  .pc-addr{border-top:1px solid var(--line-strong);padding-top:22px;display:grid;gap:13px;}
+  .pc-row{display:flex;align-items:baseline;gap:14px;font-size:14px;}
+  .pc-row .k{font-size:10px;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;width:64px;flex-shrink:0;}
+  .pc-row a{border-bottom:1px solid transparent;transition:border-color .15s;}
+  .pc-row a:hover{border-color:var(--accent);color:var(--accent-deep);}
+  .pc-cta{margin-top:30px;display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;padding:13px 22px;}
+
+  /* ============ VARIANT B — INDEX CARD ============ */
+  .idx{width:100%;max-width:640px;background:var(--panel);border:1.5px solid var(--ink-soft);position:relative;
+    background-image:repeating-linear-gradient(var(--panel), var(--panel) 31px, var(--line) 32px);
+    padding:40px 40px 34px;}
+  .idx-tab{position:absolute;top:-19px;left:36px;background:var(--accent);color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;padding:7px 16px;text-transform:uppercase;}
+  .idx-holes{position:absolute;top:12px;left:0;right:0;display:flex;justify-content:center;gap:26px;}
+  .idx-holes span{width:9px;height:9px;border-radius:50%;background:var(--bg);border:1px solid var(--line-strong);}
+  .idx-head{margin-top:14px;margin-bottom:10px;}
+  .idx-head .k{font-size:10px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;}
+  .idx-head h2{font-size:clamp(1.6rem,3vw,2.1rem);margin:6px 0 0;}
+  .idx-line{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:11px 0;align-items:baseline;}
+  .idx-line .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-soft);text-transform:uppercase;}
+  .idx-line .v{font-size:14.5px;}
+  .idx-line a:hover{color:var(--accent-deep);}
+  .idx-foot{margin-top:22px;padding-top:18px;border-top:1px dashed var(--line-strong);display:flex;justify-content:space-between;align-items:center;}
+  .idx-foot .status{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;}
+  .idx-foot .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(255,92,0,0.18);}
+  .idx-foot .go{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:2px;}
+
+  /* ============ VARIANT C — TERMINAL LOGBOOK ============ */
+  .term{width:100%;max-width:640px;background:var(--ink);border:1.5px solid var(--ink);color:#F3ECDF;font-family:'JetBrains Mono',monospace;}
+  .term-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(243,236,223,0.16);}
+  .term-bar span{width:10px;height:10px;border-radius:50%;background:rgba(243,236,223,0.25);}
+  .term-bar .file{margin-left:8px;font-size:11px;color:rgba(243,236,223,0.5);letter-spacing:.05em;}
+  .term-body{padding:28px 26px 32px;font-size:13.5px;line-height:1.9;}
+  .term-body .prompt{color:var(--accent);}
+  .term-body .cmt{color:rgba(243,236,223,0.4);}
+  .term-line{margin:0 0 4px;}
+  .term-out{margin:0 0 16px 0;color:rgba(243,236,223,0.82);}
+  .term-links{margin-top:18px;display:grid;gap:9px;}
+  .term-links a{display:flex;align-items:center;gap:10px;color:#F3ECDF;}
+  .term-links a .arrow{color:var(--accent);}
+  .term-links a:hover{color:var(--accent);}
+  .term-cursor{display:inline-block;width:8px;height:15px;background:var(--accent);margin-left:2px;vertical-align:text-bottom;animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<div class="frame">
+  <div class="label"><span class="tag">Variant A</span><h2>Postcard — send a note</h2></div>
+</div>
+<div class="stage">
+  <div class="pc">
+    <div class="pc-top">
+      <div>
+        <div class="pc-eyebrow">CONTACT — POSTED FROM DHAKA</div>
+      </div>
+      <div>
+        <div class="pc-stamp"><span id="pc-qr"></span></div>
+        <div class="pc-caption">Scan to save</div>
+      </div>
+    </div>
+    <h2 class="pc-headline display">Get in touch.</h2>
+    <p class="pc-sub">Email, GitHub or LinkedIn — whichever's easiest. I reply to all of them.</p>
+    <div class="pc-addr">
+      <div class="pc-row mono"><span class="k">Email</span><a href="mailto:senanovi908@gmail.com">senanovi908@gmail.com</a></div>
+      <div class="pc-row mono"><span class="k">GitHub</span><a href="#">github.com/muhit-1</a></div>
+      <div class="pc-row mono"><span class="k">LinkedIn</span><a href="#">linkedin.com/in/muhit-rahman</a></div>
+    </div>
+    <a href="#" class="pc-cta">GET IN TOUCH →</a>
+  </div>
+</div>
+
+<div class="frame">
+  <div class="label"><span class="tag">Variant B</span><h2>Index card — rolodex entry</h2></div>
+</div>
+<div class="stage">
+  <div class="idx">
+    <div class="idx-holes"><span></span><span></span><span></span></div>
+    <div class="idx-tab">C — CONTACT</div>
+    <div class="idx-head">
+      <div class="k mono">FILE 04 / 04</div>
+      <h2 class="display">Let's build something</h2>
+    </div>
+    <div class="idx-line"><span class="k">Name</span><span class="v">Muhit Rahman</span></div>
+    <div class="idx-line"><span class="k">Role</span><span class="v">Full-Stack Developer</span></div>
+    <div class="idx-line"><span class="k">Email</span><span class="v"><a href="mailto:senanovi908@gmail.com">senanovi908@gmail.com</a></span></div>
+    <div class="idx-line"><span class="k">GitHub</span><span class="v"><a href="#">github.com/muhit-1</a></span></div>
+    <div class="idx-line"><span class="k">LinkedIn</span><span class="v"><a href="#">linkedin.com/in/muhit-rahman</a></span></div>
+    <div class="idx-foot">
+      <div class="status"><span class="dot"></span>Available for hire</div>
+      <a href="#" class="go">OPEN FILE →</a>
+    </div>
+  </div>
+</div>
+
+<div class="frame">
+  <div class="label"><span class="tag">Variant C</span><h2>Terminal — logbook prompt</h2></div>
+</div>
+<div class="stage">
+  <div class="term">
+    <div class="term-bar"><span></span><span></span><span></span><span class="file">contact.sh</span></div>
+    <div class="term-body">
+      <p class="term-line"><span class="prompt">muhit@portfolio</span>:~$ whoami</p>
+      <p class="term-out">Full-stack developer. Dhaka, BD. Open to work.</p>
+      <p class="term-line"><span class="prompt">muhit@portfolio</span>:~$ cat contact.txt</p>
+      <div class="term-links">
+        <a href="mailto:senanovi908@gmail.com"><span class="arrow">→</span> senanovi908@gmail.com</a>
+        <a href="#"><span class="arrow">→</span> github.com/muhit-1</a>
+        <a href="#"><span class="arrow">→</span> linkedin.com/in/muhit-rahman</a>
+      </div>
+      <p class="term-line" style="margin-top:18px;"><span class="prompt">muhit@portfolio</span>:~$ <span class="term-cursor"></span></p>
+    </div>
+  </div>
+</div>
+
+<div class="note">Standalone comparison mockup — not wired into the live site. Colors/type pulled from the live theme tokens so any of these can drop in as-is.<br>QR in Variant A is generated client-side here for preview only; the final build would vendor a tiny QR lib (or a precomputed static SVG) instead of loading one from a CDN.</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+  var vcard = [
+    'BEGIN:VCARD',
+    'VERSION:3.0',
+    'N:Rahman;Muhit;;;',
+    'FN:Muhit Rahman',
+    'EMAIL:senanovi908@gmail.com',
+    'URL:https://github.com/muhit-1',
+    'URL:https://www.linkedin.com/in/muhit-rahman',
+    'END:VCARD'
+  ].join('\n');
+  new QRCode(document.getElementById('pc-qr'), {
+    text: vcard,
+    width: 76,
+    height: 76,
+    colorDark: '#221E1A',
+    colorLight: '#FFFFFF',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+</script>
+
+</body>
+</html>

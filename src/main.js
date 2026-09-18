@@ -51,10 +51,32 @@ gsap.registerPlugin(ScrollTrigger);
     log.appendChild(row);
   });
 
+  // contact QR (vCard: email + github + linkedin)
+  if (window.QRCode) {
+    var vcard = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      'N:Rahman;Muhit;;;',
+      'FN:Muhit Rahman',
+      'EMAIL:senanovi908@gmail.com',
+      'URL:https://github.com/muhit-1',
+      'URL:https://www.linkedin.com/in/muhit-rahman',
+      'END:VCARD'
+    ].join('\n');
+    new QRCode(document.getElementById('contact-qr'), {
+      text: vcard,
+      width: 126,
+      height: 126,
+      colorDark: '#221E1A',
+      colorLight: '#FFFFFF',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
+
   // theme toggle (in-memory only)
   var root = document.documentElement;
   var toggle = document.getElementById('theme-toggle');
-  var current = 'light';
+  var current = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   toggle.addEventListener('click', function () {
     current = current === 'light' ? 'dark' : 'light';
     root.setAttribute('data-theme', current);
@@ -111,12 +133,12 @@ gsap.registerPlugin(ScrollTrigger);
       scrollTrigger: { trigger: log, start: 'top 85%', once: true }
     });
 
-    gsap.from('.stamp', {
+    gsap.from('.postcard-qr', {
       opacity: 0,
       scale: 0.7,
       duration: 0.6,
       ease: 'back.out(2)',
-      scrollTrigger: { trigger: '.contact-wrap', start: 'top 85%', once: true }
+      scrollTrigger: { trigger: '.postcard', start: 'top 85%', once: true }
     });
   }
 })();
