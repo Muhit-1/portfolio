@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Muhit Rahman — Full-Stack Developer</title>
+<link rel="icon" type="image/png" href="/favicon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/src/style.css">
 </head>
@@ -11,6 +12,10 @@
 <div class="grid-bg"></div>
 
 <nav class="dock" id="dock" aria-label="Section navigation">
+  <a href="#top" class="dock-item" data-section="top" aria-label="Home">
+    <img class="dock-face" src="/favicon.png" alt="">
+    <span class="dock-label">Home</span>
+  </a>
   <a href="#about" class="dock-item" data-section="about">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>
     <span class="dock-label">About</span>
@@ -52,7 +57,8 @@
           </div>
         </div>
         <div class="title-block-photo">
-          <img class="hero-photo" src="/img/heropic.png" alt="Portrait of Muhit Rahman">
+          <img class="hero-photo hero-photo-dark" src="/img/hero-dark.png" alt="Portrait of Muhit Rahman">
+          <img class="hero-photo hero-photo-color" src="/img/hero-color.png" alt="" aria-hidden="true">
         </div>
       </div>
     </header>
@@ -63,8 +69,20 @@
         <h2 class="display">The short version</h2>
       </div>
       <div class="ledger">
-        <p>I'm a full-stack developer based in Mirpur, Dhaka, currently working as a Junior Software Engineer at SAMTrek, where I build release-ready products end to end — APIs, backend integration, and the frontend that sits on top of them.</p>
-        <p>I'm finishing a B.Sc. in Computer Science at BUBT, and most of what I build leans on React, Node.js and Firebase, with Flutter for mobile and a growing habit of shipping things properly with Docker. I like software that is clean enough to hand off to someone else without an explanation.</p>
+        <div class="about-text">
+          <p>I'm a full-stack developer based in Mirpur, Dhaka, currently working as a Junior Software Engineer at SAMTrek, where I build release-ready products end to end — APIs, backend integration, and the frontend that sits on top of them.</p>
+          <p>I'm finishing a B.Sc. in Computer Science at BUBT, and most of what I build leans on React, Node.js and Firebase, with Flutter for mobile and a growing habit of shipping things properly with Docker. I like software that is clean enough to hand off to someone else without an explanation.</p>
+        </div>
+        <div class="about-tv" id="about-tv">
+          <img class="tv-image" src="/img/tv.png" alt="" aria-hidden="true">
+          <div class="tv-screen-icon" aria-hidden="true">
+            <svg class="icon-play" viewBox="0 0 24 24"><polygon points="7,4 20,12 7,20"/></svg>
+            <svg class="icon-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          </div>
+          <button type="button" class="tv-btn tv-btn-stop" data-action="stop" aria-label="Stop music"></button>
+          <button type="button" class="tv-btn tv-btn-toggle" data-action="toggle" aria-label="Play or pause lofi music" aria-pressed="false"></button>
+          <button type="button" class="tv-btn tv-btn-next" data-action="next" aria-label="Next track"></button>
+        </div>
         <div class="chip-row">
           <span class="chip">Full-Stack Web Development</span>
           <span class="chip">Custom Software Solutions</span>
