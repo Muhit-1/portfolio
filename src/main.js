@@ -69,7 +69,7 @@ gsap.registerPlugin(ScrollTrigger);
     var audio = new Audio();
     audio.loop = true;
     audio.preload = 'none';
-    audio.volume = 0.16;
+    audio.volume = 0.06;
     audio.src = trackSrcs[trackIndex];
 
     function render() {
