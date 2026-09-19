@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 (function () {
+  var base = import.meta.env.BASE_URL;
   var gh = 'https://github.com/Muhit-1/';
   var projects = [
     { id: 'DWG-01', name: 'WorkStationX', desc: 'Windows desktop app that opens your whole work context in one click, with a countdown task timer and screen tools behind a global shortcut.', stack: 'C# · WPF · .NET · SQLite', repo: gh + 'WorkStationX' },
@@ -26,7 +27,7 @@ gsap.registerPlugin(ScrollTrigger);
     el.innerHTML =
       '<div class="behind-a"></div>' +
       '<div class="behind-b"></div>' +
-      '<img class="pin" src="/img/just-pin.png" alt="">' +
+      '<img class="pin" src="' + base + 'img/just-pin.png" alt="">' +
       '<div class="card">' +
         '<div class="mono id">' + p.id + '</div>' +
         '<h3>' + p.name + '</h3>' +
@@ -60,15 +61,15 @@ gsap.registerPlugin(ScrollTrigger);
     if (!tv) return;
 
     var trackSrcs = [
-      '/audio/lofi-piano-1.mp3',
-      '/audio/lofi-piano-2.mp3',
-      '/audio/lofi-piano-3.mp3'
+      base + 'audio/lofi-piano-1.mp3',
+      base + 'audio/lofi-piano-2.mp3',
+      base + 'audio/lofi-piano-3.mp3'
     ];
     var trackIndex = 0;
     var audio = new Audio();
     audio.loop = true;
     audio.preload = 'none';
-    audio.volume = 0.4;
+    audio.volume = 0.16;
     audio.src = trackSrcs[trackIndex];
 
     function render() {
