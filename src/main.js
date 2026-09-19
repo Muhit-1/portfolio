@@ -4,13 +4,14 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 (function () {
+  var gh = 'https://github.com/Muhit-1/';
   var projects = [
-    { id: 'DWG-01', name: 'Dhaka Bus Navigator', type: 'Web App', stack: 'React · Node · Maps API', status: 'LIVE' },
-    { id: 'DWG-02', name: 'KeyQuest', type: 'Typing &amp; Riddle Game', stack: 'JavaScript · CSS', status: 'LIVE' },
-    { id: 'DWG-03', name: 'Task Manager', type: 'Application', stack: 'React · Firebase', status: 'BUILT' },
-    { id: 'DWG-04', name: 'Music Player App', type: 'Application', stack: 'Flutter', status: 'BUILT' },
-    { id: 'DWG-05', name: 'Moisture Detection &amp; Auto-Irrigation', type: 'IoT System', stack: 'Arduino · Sensors', status: 'BUILT' },
-    { id: 'DWG-06', name: 'Nonograms', type: 'Puzzle Game', stack: 'JavaScript', status: 'LIVE' }
+    { id: 'DWG-01', name: 'WorkStationX', desc: 'Windows desktop app that opens your whole work context in one click, with a countdown task timer and screen tools behind a global shortcut.', stack: 'C# · WPF · .NET · SQLite', repo: gh + 'WorkStationX' },
+    { id: 'DWG-02', name: 'KrishiHat', desc: 'Agricultural marketplace connecting Bangladeshi farmers with buyers: fixed-price and auction sales, role-based dashboards, bilingual UI.', stack: 'Next.js · TypeScript · Prisma · MariaDB', repo: gh + 'KrishiHat' },
+    { id: 'DWG-03', name: 'Dhaka Bus Navigator', desc: 'Bus route planner for Dhaka with fare and time estimates, interactive maps and an English/Bangla interface.', stack: 'React · Vite · Leaflet · Supabase', repo: gh + 'dhaka-bus-navigator' },
+    { id: 'DWG-04', name: 'Accounting Tool', desc: 'Multi-business accounting and invoicing platform: JWT auth, transaction ledger, PDF invoices and shared access control.', stack: 'NestJS · Prisma · MySQL · React', repo: gh + 'Accounting-Tool-api' },
+    { id: 'DWG-05', name: 'Crisis Compass', desc: 'Interactive world map of live weather and natural disasters with a scrubbable seven-day timeline.', stack: 'Svelte · Open data feeds', repo: gh + 'Crisis-Compass', live: 'https://muhit-1.github.io/Crisis-Compass/' },
+    { id: 'DWG-06', name: 'KeyQuest', desc: 'Typing and riddle game: clear four words, crack the riddle, keep the clock alive. Runs entirely in the browser.', stack: 'React · JavaScript', repo: gh + 'KeyQuest', live: 'https://muhit-1.github.io/KeyQuest' }
   ];
   var rotates = [-1.6, 1.2, -0.8, 1.5, -1.1, 0.9];
   var grid = document.getElementById('work-grid');
@@ -19,7 +20,9 @@ gsap.registerPlugin(ScrollTrigger);
     el.className = 'pin-card';
     var deg = rotates[i % rotates.length];
     el.style.setProperty('--rot', deg + 'deg');
-    var statusColor = p.status === 'LIVE' ? 'var(--accent)' : 'var(--ink-soft)';
+    var links =
+      '<a class="mono" href="' + p.repo + '" target="_blank" rel="noopener">GITHUB ↗</a>' +
+      (p.live ? '<a class="mono" href="' + p.live + '" target="_blank" rel="noopener">LIVE DEMO ↗</a>' : '');
     el.innerHTML =
       '<div class="behind-a"></div>' +
       '<div class="behind-b"></div>' +
@@ -27,18 +30,18 @@ gsap.registerPlugin(ScrollTrigger);
       '<div class="card">' +
         '<div class="mono id">' + p.id + '</div>' +
         '<h3>' + p.name + '</h3>' +
-        '<div class="type">' + p.type + '</div>' +
+        '<p class="desc">' + p.desc + '</p>' +
         '<div class="mono stack">' + p.stack + '</div>' +
-        '<div class="mono status" style="color:' + statusColor + '">' + p.status + '</div>' +
+        '<div class="card-links">' + links + '</div>' +
       '</div>';
     grid.appendChild(el);
   });
 
   var timeline = [
-    { yr: '2026 — PRESENT', ttl: 'Junior Software Engineer', org: 'SAMTrek', note: 'APIs, backend integration and frontend implementation for release-ready products.' },
-    { yr: '2022 — 2026', ttl: 'B.Sc. Computer Science', org: 'BUBT', note: 'Software development, data structures, databases.' },
-    { yr: '2018 — 2020', ttl: 'Higher Secondary Certificate', org: 'Science group', note: 'Mathematics, physics, ICT.' },
-    { yr: '2016 — 2017', ttl: 'Secondary School Certificate', org: 'Science group', note: 'Foundation coursework.' }
+    { yr: 'FEB 2026 — NOW', ttl: 'Freelance Full-Stack / Backend Developer', org: 'SAMTrek — Remote (IT services agency, Germany)', note: 'Shipped Vaaii, a cross-border delivery PWA on Google Play; building Medilog24 with self-hosted CI/CD; delivered shopnojhuri.com and sam-trek.com; NestJS + Prisma accounting backend.' },
+    { yr: '2022 — 2026', ttl: 'BSc in Computer Science &amp; Engineering', org: 'Bangladesh University of Business and Technology (BUBT)', note: 'Graduated 2026.' },
+    { yr: 'CORE STACK', ttl: 'Backend · Frontend · DevOps', org: 'Languages: JS/TS, Python, Java, Kotlin, C#, PHP, SQL', note: 'Node.js, NestJS, React, Next.js, PostgreSQL, MySQL, Prisma, Docker, Coolify, Nginx, GitHub Actions.' },
+    { yr: 'LANGUAGES', ttl: 'English &amp; Bengali', org: 'Spoken', note: 'English — full professional proficiency. Bengali — native.' }
   ];
   var log = document.getElementById('logbook');
   timeline.forEach(function (t) {
@@ -50,28 +53,6 @@ gsap.registerPlugin(ScrollTrigger);
       '<div class="note">' + t.note + '</div>';
     log.appendChild(row);
   });
-
-  // contact QR (vCard: email + github + linkedin)
-  if (window.QRCode) {
-    var vcard = [
-      'BEGIN:VCARD',
-      'VERSION:3.0',
-      'N:Rahman;Muhit;;;',
-      'FN:Muhit Rahman',
-      'EMAIL:senanovi908@gmail.com',
-      'URL:https://github.com/muhit-1',
-      'URL:https://www.linkedin.com/in/muhit-rahman',
-      'END:VCARD'
-    ].join('\n');
-    new QRCode(document.getElementById('contact-qr'), {
-      text: vcard,
-      width: 126,
-      height: 126,
-      colorDark: '#221E1A',
-      colorLight: '#FFFFFF',
-      correctLevel: QRCode.CorrectLevel.M
-    });
-  }
 
   // about TV: lofi piano player
   (function () {
@@ -185,11 +166,11 @@ gsap.registerPlugin(ScrollTrigger);
       scrollTrigger: { trigger: log, start: 'top 85%', once: true }
     });
 
-    gsap.from('.postcard-qr', {
+    gsap.from('.postcard-photo', {
       opacity: 0,
-      scale: 0.7,
-      duration: 0.6,
-      ease: 'back.out(2)',
+      x: -30,
+      duration: 0.7,
+      ease: 'power3.out',
       clearProps: 'opacity,transform',
       scrollTrigger: { trigger: '.postcard', start: 'top 85%', once: true }
     });
