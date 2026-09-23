@@ -68,7 +68,9 @@
   .mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
   .display{font-family:'Space Grotesk',sans-serif;}
   .wrap{width:100%;}
-  .eyebrow{font-size:max(9px,.75rem);letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;}
+  .eyebrow{font-size:max(11px,.9375rem);letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;}
+
+  .pencil-trail{position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:90;}
 
   /* grid paper background */
   .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
@@ -93,7 +95,7 @@
   .dock-item{
     display:flex; align-items:center; justify-content:center; gap:0; width:100%;
     padding:10px 9px; border-radius:12px; color:var(--rail-fg);
-    background:none; border:none; white-space:nowrap;
+    background:none; border:none; white-space:nowrap; cursor:pointer;
     font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.05em;
     transition:gap .28s ease, background .2s ease, color .2s ease;
   }
@@ -109,10 +111,6 @@
   :root[data-theme="dark"] .icon-moon{display:block;}
 
   /* ---------- hero ---------- */
-  .topline{
-    display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem;
-    position:absolute; top:2.75rem; left:10rem; right:10rem;
-  }
   .hero{
     padding:8.125rem 10rem;
     min-height:100vh; min-height:100svh;
@@ -129,6 +127,12 @@
   .title-block::before{content:"";position:absolute;inset:4px;border:1px solid var(--line);pointer-events:none;}
   .title-block-main{flex:0 1 37.5rem; padding:3.5rem 2.75rem;}
   .title-block-main .eyebrow{color:var(--accent); margin-bottom:1rem;}
+  .tw-rest{visibility:hidden;}
+  .tw-caret{display:inline-block; width:0; position:relative;}
+  .tw-caret::after{content:""; position:absolute; left:.12em; top:-.05em; width:.5em; height:1.1em; background:currentColor; animation:tw-blink .9s steps(1) infinite;}
+  .tw-caret.done::after{animation:tw-blink .9s steps(1) 3, tw-out .3s ease 2.7s forwards;}
+  @keyframes tw-blink{50%{opacity:0;}}
+  @keyframes tw-out{to{opacity:0;}}
   .title-block-main h1{
     font-family:'Space Grotesk',sans-serif; font-weight:700;
     font-size:max(32px,4rem); line-height:1.03; margin:0 0 1.25rem; letter-spacing:-.01em;
@@ -246,13 +250,13 @@
     content:""; position:absolute; right:0; bottom:0; width:9%; height:9%;
     background:linear-gradient(135deg, transparent 46%, rgba(34,30,26,.14) 48%, var(--bg) 50%);
   }
-  .card .mono.id{font-size:max(9px,.6875rem);color:var(--accent);margin-bottom:.5rem;}
-  .card h3{font-family:'Space Grotesk',sans-serif;font-size:max(13px,1.0625rem);font-weight:600;margin:0 0 .375rem;line-height:1.25;}
-  .card .desc{font-size:max(10px,.8125rem);line-height:1.5;color:var(--ink-soft);margin:0 0 .75rem;}
-  .card .stack{font-size:max(9px,.6875rem);color:var(--ink-soft);margin-bottom:.75rem;}
+  .card .mono.id{font-size:max(11px,.75rem);letter-spacing:.06em;color:var(--accent-deep);margin-bottom:.5rem;}
+  .card h3{font-family:'Space Grotesk',sans-serif;font-size:max(15px,1.25rem);font-weight:600;margin:0 0 .5rem;line-height:1.25;}
+  .card .desc{font-size:max(12px,.9375rem);line-height:1.55;color:var(--ink-soft);margin:0 0 .875rem;}
+  .card .stack{font-size:max(11px,.75rem);color:var(--ink-soft);margin-bottom:.875rem;}
   .card-links{display:flex;flex-wrap:wrap;gap:.5rem 1rem;}
-  .card-links a{font-size:max(9px,.6875rem);letter-spacing:.06em;color:var(--accent);border-bottom:1px solid transparent;transition:border-color .15s,color .15s;}
-  .card-links a:hover{border-color:var(--accent);color:var(--accent-deep);}
+  .card-links a{font-size:max(11px,.78125rem);font-weight:500;letter-spacing:.06em;color:var(--accent-deep);border-bottom:1px solid transparent;transition:border-color .15s,color .15s;}
+  .card-links a:hover{border-color:var(--ink);color:var(--ink);}
 
   /* ---------- experience / logbook ---------- */
   .logbook{border-top:2px solid var(--ink); flex:1; display:flex; flex-direction:column; justify-content:center;}
@@ -285,9 +289,6 @@
   .postcard-row a{color:var(--ink); border-bottom:1px solid transparent; transition:border-color .15s, color .15s;}
   .postcard-row a:hover{border-color:var(--accent); color:var(--accent-deep);}
   .postcard-cta{margin-top:1.875rem;}
-  footer{padding:1.75rem 0 3.125rem;border-top:1px solid var(--line);margin-top:.625rem;}
-  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.625rem;font-size:max(9px,.6875rem);color:var(--ink-soft);padding:0 10rem;}
-  footer .mono{letter-spacing:.06em;}
 
   /* =====================================================================
      Tablet + mobile (below 1200px): separate stacked layout.
@@ -299,9 +300,7 @@
       padding:64px 32px 48px 88px;
       min-height:0; scroll-snap-align:none;
     }
-    .topline, .section-head{position:static; margin-bottom:24px;}
-    .topline{padding:0;}
-    footer .wrap{padding:0 32px 0 88px; font-size:11px;}
+    .section-head{position:static; margin-bottom:24px;}
 
     .title-block{
       flex-direction:column; flex-wrap:nowrap; justify-content:flex-start;
@@ -315,7 +314,7 @@
     .title-block-main h1{font-size:44px;}
     .title-block-main p{font-size:16px;}
     .btn{font-size:12px; padding:13px 20px;}
-    .eyebrow{font-size:11px;}
+    .eyebrow{font-size:13px;}
     .section-head h2{font-size:30px;}
 
     .ledger{
@@ -334,9 +333,9 @@
     }
     .pin-card:hover{transform:rotate(var(--rot,0deg));}
     .card{padding:26px 22px 24px;}
-    .card h3{font-size:16px;}
-    .card .desc{font-size:13px;}
-    .card .mono.id, .card .stack, .card-links a{font-size:10px;}
+    .card h3{font-size:18px;}
+    .card .desc{font-size:14px;}
+    .card .mono.id, .card .stack, .card-links a{font-size:12px;}
 
     .logbook{flex:none; padding:8px 0;}
     .log-row{padding:16px 4px; gap:16px;}
@@ -357,8 +356,6 @@
   }
   @media (max-width:620px){
     .hero, section{padding:40px 16px 32px;}
-    footer .wrap{padding:0 16px; font-size:10px;}
-    footer{padding-bottom:88px;}
     .title-block{gap:20px; padding:24px 0;}
     .title-block-main, .postcard-body{padding:0 20px;}
     #contact{min-height:100svh;}

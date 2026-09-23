@@ -104,6 +104,109 @@ gsap.registerPlugin(ScrollTrigger);
     if (nextBtn) nextBtn.addEventListener('click', function (e) { e.stopPropagation(); nextTrack(); });
   })();
 
+  // pencil trail: graphite marks follow the cursor tip and fade out (mouse devices only)
+  (function () {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var LIFE = 1500;
+    var canvas = document.createElement('canvas');
+    canvas.className = 'pencil-trail';
+    canvas.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(canvas);
+    var ctx = canvas.getContext('2d');
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var pts = [];
+    var running = false;
+    var rootStyle = getComputedStyle(document.documentElement);
+
+    function resize() {
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    var skipped = false;
+
+    window.addEventListener('mousemove', function (e) {
+      var now = performance.now();
+      var last = pts[pts.length - 1];
+      if (e.target && e.target.nodeType === 1 && getComputedStyle(e.target).cursor === 'pointer') { skipped = true; return; }
+      if (last) {
+        var dx = e.clientX - last.x, dy = e.clientY - last.y;
+        if (dx * dx + dy * dy < 9) return;
+      }
+      pts.push({
+        x: e.clientX, y: e.clientY, t: now,
+        brk: !last || skipped || now - last.t > 120,
+        jx: (Math.random() - 0.5) * 1.6, jy: (Math.random() - 0.5) * 1.6
+      });
+      skipped = false;
+      if (!running) { running = true; requestAnimationFrame(frame); }
+    }, { passive: true });
+
+    function frame(now) {
+      while (pts.length && now - pts[0].t > LIFE) pts.shift();
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      if (!pts.length) { running = false; return; }
+
+      var ink = rootStyle.getPropertyValue('--ink').trim() || '#221E1A';
+      ctx.strokeStyle = ink;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      for (var i = 1; i < pts.length; i++) {
+        var p = pts[i], q = pts[i - 1];
+        if (p.brk) continue;
+        var life = 1 - (now - p.t) / LIFE;
+        if (life <= 0) continue;
+        var a = life * life;
+        ctx.globalAlpha = a * 0.55;
+        ctx.lineWidth = 1.7;
+        ctx.beginPath();
+        ctx.moveTo(q.x, q.y);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+        ctx.globalAlpha = a * 0.28;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(q.x + q.jx, q.y + q.jy);
+        ctx.lineTo(p.x + p.jx, p.y + p.jy);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(frame);
+    }
+  })();
+
+  // hero tagline: typewriter with a caret (layout is reserved so nothing shifts)
+  (function () {
+    var el = document.getElementById('hero-tagline');
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var text = el.getAttribute('data-text');
+    el.setAttribute('aria-label', text);
+    el.innerHTML = '<span class="tw-typed" aria-hidden="true"></span><span class="tw-caret" aria-hidden="true"></span><span class="tw-rest" aria-hidden="true">' + text + '</span>';
+    var typed = el.querySelector('.tw-typed');
+    var rest = el.querySelector('.tw-rest');
+    var caret = el.querySelector('.tw-caret');
+    var i = 0;
+    function step() {
+      i++;
+      typed.textContent = text.slice(0, i);
+      rest.textContent = text.slice(i);
+      if (i < text.length) {
+        window.setTimeout(step, 38 + Math.random() * 40);
+      } else {
+        window.setTimeout(function () { caret.classList.add('done'); }, 2600);
+      }
+    }
+    rest.textContent = text;
+    typed.textContent = '';
+    window.setTimeout(step, 900);
+  })();
+
   // theme toggle (in-memory only)
   var root = document.documentElement;
   var toggle = document.getElementById('theme-toggle');
