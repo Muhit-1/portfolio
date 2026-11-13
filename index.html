@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,72 +7,71 @@
 <meta name="description" content="Backend-focused full-stack developer in Dhaka, open to remote work. Node.js, NestJS, TypeScript, React, self-hosted CI/CD.">
 <meta name="author" content="Muhit Rahman Kayeem">
 <link rel="icon" type="image/png" href="/favicon.png">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@700&family=Shantell+Sans:wght,BNCE,INFM@300..800,-50..50,0..100&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
-<div class="grid-bg"></div>
-
-<nav class="dock" id="dock" aria-label="Section navigation">
-  <a href="#top" class="dock-item" data-section="top" aria-label="Home">
-    <img class="dock-face" src="/favicon.png" alt="">
-    <span class="dock-label">Home</span>
-  </a>
-  <a href="#about" class="dock-item" data-section="about">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>
-    <span class="dock-label">About</span>
-  </a>
-  <a href="#work" class="dock-item" data-section="work">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="7.5" width="17" height="12" rx="1.4"/><path d="M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5"/><path d="M3.5 12.5h17"/></svg>
-    <span class="dock-label">Work</span>
-  </a>
-  <a href="#experience" class="dock-item" data-section="experience">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16l6-3.4 6 3.4V4"/></svg>
-    <span class="dock-label">Experience</span>
-  </a>
-  <a href="#contact" class="dock-item" data-section="contact">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4 6.5l8 6 8-6"/></svg>
-    <span class="dock-label">Contact</span>
-  </a>
-  <button class="dock-item" id="theme-toggle" aria-label="Toggle color theme">
-    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.4M12 19.1v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/></svg>
-    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"/></svg>
-    <span class="dock-label">Theme</span>
-  </button>
-</nav>
 
 <main>
-  <div class="wrap">
-    <header class="hero" id="top">
-      <div class="title-block">
-        <div class="title-block-main">
-          <div class="eyebrow mono" id="hero-tagline" data-text="BACKEND-FOCUSED FULL-STACK DEVELOPER">BACKEND-FOCUSED FULL-STACK DEVELOPER</div>
-          <h1 class="display">Muhit Rahman Kayeem</h1>
-          <p>I ship production platforms end to end — Node.js, NestJS and TypeScript on the backend, React on the front — with a growing DevOps practice: self-hosted CI/CD, OAuth integrations, and MySQL or PostgreSQL in production. Open to remote roles.</p>
-          <div class="btn-row">
-            <a href="#contact" class="btn btn-solid">GET IN TOUCH →</a>
-            <a href="cv/Muhit_Rahman_Kayeem_CV.pdf" download="Muhit_Rahman_Kayeem_CV.pdf" class="btn btn-outline">DOWNLOAD CV ↓</a>
+  <header class="hero" id="top">
+    <div class="hero-copy">
+      <div class="eyebrow mono" id="hero-tagline" data-text="BACKEND-FOCUSED FULL-STACK DEVELOPER">BACKEND-FOCUSED FULL-STACK DEVELOPER</div>
+      <h1 class="name" aria-label="Muhit Rahman Kayeem">
+        <span class="name-row" aria-hidden="true"><span class="write">Muhit Rahman</span></span>
+        <span class="name-row" aria-hidden="true"><span class="write" style="--wd:.75s">Kayeem
+          <svg class="swoosh" viewBox="0 0 600 40" preserveAspectRatio="none"><path d="M6 26 C 110 6, 250 36, 372 16 S 548 8, 594 22"/></svg>
+        </span></span>
+      </h1>
+      <div class="hero-lower">
+        <div>
+          <p class="lede" data-in style="--d:.9s">I ship <mark class="hl" style="--hd:1.5s">production platforms end to end</mark> — Node.js, NestJS and TypeScript on the backend, React on the front — with a growing DevOps practice: self-hosted CI/CD, OAuth integrations, and MySQL or PostgreSQL in production.</p>
+          <div class="btn-row" data-in style="--d:1.05s">
+            <a href="#contact" class="btn btn-orange sk">Get in touch <span class="arr">→</span></a>
+            <a href="cv/Muhit_Rahman_Kayeem_CV.pdf" download="Muhit_Rahman_Kayeem_CV.pdf" class="btn sk">Download CV <span class="arr arr-down">↓</span></a>
           </div>
         </div>
-        <div class="title-block-photo">
-          <img class="hero-photo hero-photo-dark" src="/img/hero-dark.png" alt="Portrait of Muhit Rahman Kayeem">
-          <img class="hero-photo hero-photo-color" src="/img/hero-color.png" alt="" aria-hidden="true">
-        </div>
+        <dl class="form" data-in style="--d:.7s">
+          <div class="form-row"><dt>Role</dt><dd><span style="--wd:1s">Backend-focused full-stack dev</span></dd></div>
+          <div class="form-row"><dt>Based in</dt><dd><span style="--wd:1.25s">Dhaka, Bangladesh</span></dd></div>
+          <div class="form-row"><dt>Right now</dt><dd><span style="--wd:1.5s">Freelancing with SAMTrek</span></dd></div>
+        </dl>
       </div>
-    </header>
+    </div>
 
-    <section id="about">
-      <div class="section-head">
-        <div class="eyebrow mono">ABOUT — NOTES</div>
-        <h2 class="display">Behind the code</h2>
+    <div class="hero-photo" data-in style="--d:.45s">
+      <div class="photo-stack">
+        <img src="/img/hero-dark.png" alt="Portrait of Muhit Rahman Kayeem">
+        <img class="photo-color" src="/img/hero-color.png" alt="" aria-hidden="true">
       </div>
-      <div class="ledger">
-        <div class="about-text">
-          <p>I'm a backend-focused full-stack developer based in Dhaka and open to remote work. Since February 2026 I've been freelancing with SAMTrek, an IT services agency in Germany, shipping production platforms end to end — including Vaaii, a cross-border delivery marketplace live on the Google Play Store as a PWA.</p>
-          <p>I work mostly in Node.js, NestJS and TypeScript on the backend with React on the front, and I'm building a DevOps habit around it: self-hosted CI/CD with Coolify, Google OAuth and Drive integrations, and MySQL or PostgreSQL in production. I graduated with a BSc in Computer Science &amp; Engineering from BUBT in 2026.</p>
-        </div>
-        <div class="about-tv" id="about-tv">
+      <div class="sticky"><small>STATUS</small><span class="live-dot"></span>Open to remote roles</div>
+      <div class="thatsme" aria-hidden="true">
+        that's me
+        <svg viewBox="0 0 60 54"><path d="M4 48 C 22 50, 42 40, 48 10"/><path d="M36 20 L48 9 L56 24"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="head" data-reveal>
+      <h2>Behind the code<svg class="scribble" viewBox="0 0 600 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 18 C 90 6, 190 26, 300 14 S 500 8, 596 18"/></svg></h2>
+      <p class="aside">a few notes about me</p>
+    </div>
+    <div class="about">
+      <div class="about-text" data-reveal>
+        <p>I'm a backend-focused full-stack developer based in Dhaka and open to remote work. Since February 2026 I've been freelancing with SAMTrek, an IT services agency in Germany, shipping production platforms end to end — including <mark class="hl">Vaaii, a cross-border delivery marketplace</mark> live on the Google Play Store as a PWA.</p>
+        <p>I work mostly in Node.js, NestJS and TypeScript on the backend with React on the front, and I'm building a DevOps habit around it: <mark class="hl" style="--hd:.7s">self-hosted CI/CD with Coolify</mark>, Google OAuth and Drive integrations, and MySQL or PostgreSQL in production. I graduated with a BSc in Computer Science &amp; Engineering from BUBT in 2026.</p>
+      </div>
+      <div>
+        <p class="list-title" data-reveal>What I do</p>
+        <ul class="checks" id="checks" data-stagger></ul>
+      </div>
+      <figure class="tv" id="tv" data-reveal>
+        <div class="tv-set" id="tv-set">
           <img class="tv-image" src="/img/tv.png" alt="" aria-hidden="true">
+          <span class="tv-wave tv-wave-1" aria-hidden="true"></span>
+          <span class="tv-wave tv-wave-2" aria-hidden="true"></span>
           <div class="tv-screen-icon" aria-hidden="true">
             <svg class="icon-play" viewBox="0 0 24 24"><polygon points="7,4 20,12 7,20"/></svg>
             <svg class="icon-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
@@ -81,72 +80,91 @@
           <button type="button" class="tv-btn tv-btn-toggle" data-action="toggle" aria-label="Play or pause lofi music" aria-pressed="false"></button>
           <button type="button" class="tv-btn tv-btn-next" data-action="next" aria-label="Next track"></button>
         </div>
-        <div class="chip-row">
-          <span class="chip">Backend &amp; API Development</span>
-          <span class="chip">Full-Stack Web Apps</span>
-          <span class="chip">PWA &amp; Play Store Publishing</span>
-          <span class="chip">Self-Hosted CI/CD (Coolify)</span>
-          <span class="chip">MySQL &amp; PostgreSQL</span>
-          <span class="chip">WordPress / WooCommerce</span>
-        </div>
-      </div>
-    </section>
+        <figcaption class="tv-cap" id="tv-cap">click the TV for lofi piano</figcaption>
+      </figure>
+    </div>
+  </section>
 
-    <section id="work">
-      <div class="section-head work-head">
-        <div>
-          <div class="eyebrow mono">SELECTED WORK — PROJECT INDEX</div>
-          <h2 class="display">Pinned to the board</h2>
-        </div>
-        <a href="projects.html" class="btn btn-outline">VIEW MORE PROJECTS →</a>
-      </div>
-      <div class="work-grid" id="work-grid"></div>
-    </section>
+  <section id="work">
+    <div class="head" data-reveal>
+      <h2>Selected work<svg class="scribble" viewBox="0 0 600 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 14 C 120 26, 210 4, 330 16 S 520 24, 596 12"/></svg></h2>
+      <p class="aside">six things I built</p>
+    </div>
+    <div class="work-grid" id="work-grid" data-stagger></div>
+    <div class="work-more" data-reveal>
+      <a href="projects.html" data-nb="projects.html" class="btn btn-ink sk">See all projects <span class="arr">→</span></a>
+    </div>
+  </section>
 
-    <section id="experience">
-      <div class="section-head">
-        <div class="eyebrow mono">LOGBOOK — WHERE THE TIME WENT</div>
-        <h2 class="display">Experience &amp; Education</h2>
+  <section id="experience">
+    <div class="head" data-reveal>
+      <h2>Experience &amp; education<svg class="scribble" viewBox="0 0 600 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 18 C 90 6, 190 26, 300 14 S 500 8, 596 18"/></svg></h2>
+      <p class="aside">where the time went</p>
+    </div>
+    <div class="exp">
+      <div class="timeline" data-stagger>
+        <article class="entry now">
+          <span class="when">Feb 2026 — now</span>
+          <h3>Freelance Full-Stack / Backend Developer</h3>
+          <p class="org">SAMTrek — Remote (IT services agency, Germany)</p>
+          <ul class="notes">
+            <li>Shipped Vaaii, a cross-border delivery PWA on Google Play</li>
+            <li>Building Medilog24 with self-hosted CI/CD</li>
+            <li>Delivered shopnojhuri.com and sam-trek.com</li>
+            <li>Built a NestJS + Prisma accounting backend</li>
+          </ul>
+        </article>
+        <article class="entry">
+          <span class="when">2022 — 2026</span>
+          <h3>BSc in Computer Science &amp; Engineering</h3>
+          <p class="org">Bangladesh University of Business and Technology (BUBT)</p>
+          <ul class="notes"><li>Graduated 2026</li></ul>
+        </article>
       </div>
-      <div class="logbook" id="logbook"></div>
-    </section>
+      <dl class="toolkit" data-reveal>
+        <span class="tape" aria-hidden="true"></span>
+        <p class="toolkit-title">Toolkit</p>
+        <div class="tk-row"><dt>LANGUAGES</dt><dd>JavaScript / TypeScript, Python, Java, Kotlin, C#, PHP, SQL</dd></div>
+        <div class="tk-row"><dt>BACKEND</dt><dd>Node.js, NestJS, Prisma</dd></div>
+        <div class="tk-row"><dt>FRONTEND</dt><dd>React, Next.js</dd></div>
+        <div class="tk-row"><dt>DATABASES</dt><dd>PostgreSQL, MySQL</dd></div>
+        <div class="tk-row"><dt>DEVOPS</dt><dd>Docker, Coolify, Nginx, GitHub Actions</dd></div>
+        <div class="tk-row"><dt>SPOKEN</dt><dd>English (full professional), Bengali (native)</dd></div>
+      </dl>
+    </div>
+  </section>
 
-    <section id="contact">
-      <div class="title-block postcard">
-        <div class="postcard-inner">
-        <div class="postcard-photo"><img src="/img/contact-photo.png" alt="Muhit Rahman Kayeem"></div>
-        <div class="postcard-body">
-          <div class="eyebrow mono">CONTACT — POSTED FROM DHAKA</div>
-          <h2 class="display postcard-headline">Get in touch.</h2>
-          <p class="postcard-sub">Email, GitHub or LinkedIn — whichever's easiest. I reply to all of them.</p>
-          <div class="postcard-addr">
-            <div class="postcard-row">
-              <span class="postcard-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4 6.5l8 6 8-6"/></svg></span>
-              <span class="postcard-k mono">Email</span>
-              <a href="mailto:senanovi908@gmail.com" class="mono">senanovi908@gmail.com</a>
-            </div>
-            <div class="postcard-row">
-              <span class="postcard-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.6 3.5h3l1.4 4-2 1.3a11 11 0 0 0 5.6 5.6l1.3-2 4 1.4v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/></svg></span>
-              <span class="postcard-k mono">Phone</span>
-              <a href="tel:+8801760052565" class="mono">+880 1760-052565</a>
-            </div>
-            <div class="postcard-row">
-              <span class="postcard-ico postcard-ico-badge mono" aria-hidden="true">GH</span>
-              <span class="postcard-k mono">GitHub</span>
-              <a href="https://github.com/muhit-1" target="_blank" rel="noopener" class="mono">github.com/muhit-1</a>
-            </div>
-            <div class="postcard-row">
-              <span class="postcard-ico postcard-ico-badge mono" aria-hidden="true">in</span>
-              <span class="postcard-k mono">LinkedIn</span>
-              <a href="https://www.linkedin.com/in/muhit-rahman/" target="_blank" rel="noopener" class="mono">linkedin.com/in/muhit-rahman</a>
-            </div>
-          </div>
-          <a href="mailto:senanovi908@gmail.com" class="btn btn-solid postcard-cta">GET IN TOUCH →</a>
+  <section id="contact">
+    <div class="head" data-reveal>
+      <h2>Get in touch<svg class="scribble" viewBox="0 0 600 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 14 C 120 26, 210 4, 330 16 S 520 24, 596 12"/></svg></h2>
+      <p class="aside">posted from Dhaka</p>
+    </div>
+    <div class="contact">
+      <div>
+        <p class="contact-sub" data-reveal>Email, GitHub or LinkedIn — whichever's easiest.</p>
+        <div class="addr" data-stagger>
+          <a class="addr-row" href="mailto:senanovi908@gmail.com"><span class="addr-k">Email</span><span class="addr-v">senanovi908@gmail.com</span><span class="addr-go" aria-hidden="true">↗</span></a>
+          <a class="addr-row" href="tel:+8801760052565"><span class="addr-k">Phone</span><span class="addr-v">+880 1760-052565</span><span class="addr-go" aria-hidden="true">↗</span></a>
+          <a class="addr-row" href="https://github.com/muhit-1" target="_blank" rel="noopener"><span class="addr-k">GitHub</span><span class="addr-v">github.com/muhit-1</span><span class="addr-go" aria-hidden="true">↗</span></a>
+          <a class="addr-row" href="https://www.linkedin.com/in/muhit-rahman/" target="_blank" rel="noopener"><span class="addr-k">LinkedIn</span><span class="addr-v">linkedin.com/in/muhit-rahman</span><span class="addr-go" aria-hidden="true">↗</span></a>
         </div>
-        </div>
+        <div data-reveal><a href="mailto:senanovi908@gmail.com" class="btn btn-orange sk">Write an email <span class="arr">→</span></a></div>
       </div>
-    </section>
-  </div>
+      <div class="contact-side" data-reveal>
+        <figure class="snap">
+          <span class="tape" aria-hidden="true"></span>
+          <img src="/img/contact-photo.png" alt="Muhit Rahman Kayeem">
+          <figcaption>Muhit, in Dhaka</figcaption>
+        </figure>
+        <div class="sticky">I reply to all of them.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>Muhit Rahman Kayeem · Dhaka, Bangladesh</span>
+    <a href="#top">Back to top <span class="arr">↑</span></a>
+  </footer>
 </main>
 
 <script type="module" src="/src/main.js"></script>
