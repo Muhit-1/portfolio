@@ -105,7 +105,7 @@ export var projects = [
     summary: 'A bus-route and fare finder for Dhaka: pick two stops and see which buses connect them and roughly what the trip costs.',
     tags: ['React', 'Vite', 'Leaflet', 'Express', 'MySQL'],
     status: 'Work in progress, runs locally', platform: 'Web app',
-    repo: gh + 'dhaka-bus-navigator', live: '', media: null,
+    repo: gh + 'dhaka-bus-navigator', live: '', media: { type: 'video', src: base + 'media/dhaka-bus-navigator-promo.mp4' },
     goal: [
       'Make it quicker to work out <mark class="hl">which bus gets you between two stops in Dhaka</mark>, and what the fare should be, without asking around at the stand.'
     ],
@@ -148,7 +148,7 @@ export var projects = [
     summary: 'An interactive world map of live weather and natural disasters, with a timeline you can scrub to watch conditions develop.',
     tags: ['Svelte', 'Open data feeds'],
     status: 'Live', platform: 'Web app',
-    repo: gh + 'Crisis-Compass', live: 'https://muhit-1.github.io/Crisis-Compass/', media: null,
+    repo: gh + 'Crisis-Compass', live: 'https://muhit-1.github.io/Crisis-Compass/', media: { type: 'video', src: base + 'media/crisis-compass-promo-v2.mp4' },
     goal: [
       'Put <mark class="hl">forecast weather and live disaster alerts on one map</mark>, and let you move backwards and forwards through time to see how a situation is developing.',
       'Everything it uses is free and needs no API key or account, so anyone can open the link or run it themselves.'
@@ -171,7 +171,7 @@ export var projects = [
     summary: 'A typing game where the words are clues: clear four of them, then crack the riddle they were pointing at before the clock runs out.',
     tags: ['React', 'JavaScript'],
     status: 'Live', platform: 'Browser game',
-    repo: gh + 'KeyQuest', live: 'https://muhit-1.github.io/KeyQuest', media: null,
+    repo: gh + 'KeyQuest', live: 'https://muhit-1.github.io/KeyQuest', media: { type: 'video', src: base + 'media/keyquest-promo.mp4' },
     goal: [
       'A typing game with a twist: <mark class="hl">the words you type are clues</mark>. Clear a round of four and a riddle appears. Get it right for points and extra seconds; get it wrong and the run ends.',
       'There is no backend at all. No database, no accounts, no keys. Scores stay in your own browser.'
