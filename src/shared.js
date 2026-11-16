@@ -438,7 +438,8 @@ function wireTv() {
 // pencil trail (same as the live site)
 function wireTrail() {
   if (reduceMotion || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-  var LIFE = 1500, pts = [], running = false, skipped = false;
+  // tuned in the trail mockup: thicker ink that thins toward the tail and ends quickly
+  var LIFE = 500, WIDTH = 3.5, HOLD = 0.15, TAPER = 0.6, pts = [], running = false, skipped = false;
   var canvas = document.createElement('canvas');
   canvas.className = 'pencil-trail';
   canvas.setAttribute('aria-hidden', 'true');
@@ -465,12 +466,13 @@ function wireTrail() {
     for (var i = 1; i < pts.length; i++) {
       var p = pts[i], q = pts[i - 1];
       if (p.brk) continue;
-      var life = 1 - (now - p.t) / LIFE;
-      if (life <= 0) continue;
-      var a = life * life;
-      ctx.globalAlpha = a * 0.55; ctx.lineWidth = 1.7;
+      var f = (now - p.t) / LIFE;                     // 0 = fresh, 1 = gone
+      if (f >= 1) continue;
+      var tt = f <= HOLD ? 0 : (f - HOLD) / (1 - HOLD); // 0..1 across the tail
+      var a = (1 - tt) * (1 - tt), w = WIDTH * (1 - TAPER * tt);
+      ctx.globalAlpha = a * 0.55; ctx.lineWidth = Math.max(0.4, w);
       ctx.beginPath(); ctx.moveTo(q.x, q.y); ctx.lineTo(p.x, p.y); ctx.stroke();
-      ctx.globalAlpha = a * 0.28; ctx.lineWidth = 1;
+      ctx.globalAlpha = a * 0.28; ctx.lineWidth = Math.max(0.3, w * 0.6);
       ctx.beginPath(); ctx.moveTo(q.x + q.jx, q.y + q.jy); ctx.lineTo(p.x + p.jx, p.y + p.jy); ctx.stroke();
     }
     ctx.globalAlpha = 1;
