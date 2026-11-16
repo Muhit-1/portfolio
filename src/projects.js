@@ -1,9 +1,20 @@
-import { init, projects, doodle } from './shared.js';
+import { init, projects, doodle, reduceMotion } from './shared.js';
 
 var cats = [['all', 'All'], ['web', 'Web apps'], ['desktop', 'Desktop'], ['game', 'Games']];
 var tilts = [-1.8, 1.4, -1.1, 1.7, -1.5, 1.2];
 
 document.getElementById('count-note').textContent = projects.length + ' so far';
+
+// the taped frame on each card: a preview of the project's clip when it has one
+function thumb(p) {
+  if (p.media && p.media.type === 'video') {
+    // #t=1 makes the browser show a frame from one second in as the still
+    return '<video class="pv" src="' + p.media.src + '#t=1" muted loop playsinline preload="metadata"></video>' +
+      '<span class="pv-badge"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.500v9l7.500-4.500z"/></svg>preview</span>';
+  }
+  if (p.media) return '<img class="media" src="' + p.media.src + '" alt="' + p.name + ' in use" loading="lazy">';
+  return doodle(p.icon) + '<span class="shot-note">clip coming soon</span>';
+}
 
 // rows
 var list = document.getElementById('plist');
@@ -16,7 +27,7 @@ projects.forEach(function (p, i) {
     (p.live ? '<span class="stamp-live">LIVE</span>' : '') +
     '<figure class="shot" style="--sr:' + tilts[i] + 'deg">' +
       '<span class="tape" style="--tr:' + (-tilts[i] * 2) + 'deg" aria-hidden="true"></span>' +
-      '<div class="shot-in">' + doodle(p.icon) + '<span class="shot-note">clip coming soon</span></div>' +
+      '<a class="shot-in" href="' + page + '" data-nb="' + page + '" aria-label="Open ' + p.name + '">' + thumb(p) + '</a>' +
     '</figure>' +
     '<div>' +
       '<span class="kind">' + p.kind + '</span>' +
@@ -30,6 +41,24 @@ projects.forEach(function (p, i) {
       '</div>' +
     '</div>';
   list.appendChild(row);
+});
+
+// previews play while the card is hovered or focused; on touch screens, while the card is mostly on screen
+[].forEach.call(list.querySelectorAll('.prow'), function (row) {
+  var video = row.querySelector('video.pv');
+  if (!video) return;
+  function play() { row.classList.add('playing'); video.play().catch(function () { row.classList.remove('playing'); }); }
+  function pause() { row.classList.remove('playing'); video.pause(); }
+  if (window.matchMedia('(hover: hover)').matches) {
+    row.addEventListener('mouseenter', play);
+    row.addEventListener('mouseleave', pause);
+    row.addEventListener('focusin', play);
+    row.addEventListener('focusout', pause);
+  } else if (!reduceMotion && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) play(); else pause(); });
+    }, { threshold: 0.7 }).observe(row);
+  }
 });
 
 // filter tabs, with a count on each

@@ -3,7 +3,7 @@
 var root = document.documentElement;
 root.classList.remove('no-js');
 root.classList.add('js');
-var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+export var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var base = import.meta.env.BASE_URL;
 
 // The theme is not stored anywhere. A manual choice rides along on links
@@ -226,11 +226,19 @@ function buildChrome(nav, homeHref) {
   var top =
     '<div class="top" id="topbar">' +
       '<a class="logo"' + logoAttrs + '>Muhit Kayeem<b>.</b></a>' +
-      '<div class="top-right"><button class="btn btn-sm sk" id="theme-toggle" type="button"></button></div>' +
+      '<div class="top-right">' +
+        '<button class="lswitch" id="theme-toggle" type="button" role="switch" aria-checked="true">' +
+          '<span class="lswitch-label" id="lswitch-label">lights on</span>' +
+          '<span class="lswitch-plate" aria-hidden="true"><span class="lswitch-slot"><span class="lswitch-lever"></span></span></span>' +
+        '</button>' +
+      '</div>' +
     '</div>';
   var dock =
     '<nav class="dock" id="dock" aria-label="Sections"><span class="dock-ind" id="dock-ind" aria-hidden="true"></span>' +
-    nav.map(function (n) { return navLink(n, 'dock-item', ico(n.icon) + '<span class="dock-label">' + n.label + '</span>'); }).join('') +
+    nav.map(function (n) {
+      return (n.sep ? '<span class="dock-sep" aria-hidden="true"></span>' : '') +
+        navLink(n, 'dock-item', ico(n.icon) + '<span class="dock-label">' + n.label + '</span>');
+    }).join('') +
     '</nav>';
 
   document.body.insertAdjacentHTML('afterbegin', defs + furniture + top);
@@ -269,17 +277,67 @@ function refit() {
   window.setTimeout(function () { fitName(); moveMarker(); }, 500);
 }
 
+// A light switch: flips the theme with a short mechanical click.
+// The click is synthesised (a noise tick plus a low thunk), so there is no audio file to load.
+var audioCtx = null;
+function switchSound(on) {
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    audioCtx = audioCtx || new AC();
+    var ctx = audioCtx, t = ctx.currentTime;
+    var len = Math.floor(ctx.sampleRate * 0.035);
+    var buf = ctx.createBuffer(1, len, ctx.sampleRate), data = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+    var tick = ctx.createBufferSource();
+    tick.buffer = buf;
+    var band = ctx.createBiquadFilter();
+    band.type = 'bandpass'; band.frequency.value = on ? 3200 : 2100; band.Q.value = 1.2;
+    var tickGain = ctx.createGain();
+    tickGain.gain.value = 0.5;
+    tick.connect(band); band.connect(tickGain); tickGain.connect(ctx.destination);
+    tick.start(t);
+    var thunk = ctx.createOscillator(), thunkGain = ctx.createGain();
+    thunk.type = 'triangle';
+    thunk.frequency.setValueAtTime(on ? 210 : 150, t);
+    thunk.frequency.exponentialRampToValueAtTime(on ? 110 : 70, t + 0.07);
+    thunkGain.gain.setValueAtTime(0.22, t);
+    thunkGain.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
+    thunk.connect(thunkGain); thunkGain.connect(ctx.destination);
+    thunk.start(t); thunk.stop(t + 0.1);
+  } catch (e) { /* no sound is fine */ }
+}
 function wireTheme() {
-  var btn = document.getElementById('theme-toggle');
+  var btn = document.getElementById('theme-toggle'), label = document.getElementById('lswitch-label');
   var current = theme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  function label() { btn.textContent = current === 'dark' ? 'Light paper' : 'Dark paper'; }
-  label();
+  function render() {
+    var on = current === 'light';
+    btn.setAttribute('aria-checked', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', 'Lights');
+    label.textContent = on ? 'lights on' : 'lights off';
+  }
+  render();
   btn.addEventListener('click', function () {
     current = current === 'light' ? 'dark' : 'light';
     theme = current;
     root.setAttribute('data-theme', theme);
-    label();
+    switchSound(current === 'light');
+    render();
     syncLinks();
+  });
+}
+
+// the same footer on every page
+function fillFooter() {
+  [].forEach.call(document.querySelectorAll('.foot'), function (el) {
+    el.innerHTML =
+      '<div class="foot-id"><span class="logo">Muhit Kayeem<b>.</b></span><span>Backend-focused full-stack developer · Dhaka, Bangladesh</span></div>' +
+      '<nav class="foot-links" aria-label="Elsewhere">' +
+        '<a class="pen" href="mailto:senanovi908@gmail.com">Email</a>' +
+        '<a class="pen" href="https://github.com/muhit-1" target="_blank" rel="noopener">GitHub <span class="arr arr-out">↗</span></a>' +
+        '<a class="pen" href="https://www.linkedin.com/in/muhit-rahman/" target="_blank" rel="noopener">LinkedIn <span class="arr arr-out">↗</span></a>' +
+      '</nav>' +
+      '<a class="btn btn-sm sk" href="#top">Back to top <span class="arr arr-up">↑</span></a>';
   });
 }
 
@@ -422,6 +480,7 @@ function wireTrail() {
 export function init(options) {
   buildChrome(options.nav, options.home || 'index.html');
   wireTheme();
+  fillFooter();
   wireReveal();
   wireScrollspy(options.nav);
   wireTypewriter();

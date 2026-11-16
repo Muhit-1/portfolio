@@ -46,6 +46,6 @@ init({
     { label: 'Work', icon: 'work', section: 'work' },
     { label: 'Experience', icon: 'experience', section: 'experience' },
     { label: 'Contact', icon: 'contact', section: 'contact' },
-    { label: 'All projects', icon: 'projects', to: 'projects.html', count: projects.length }
+    { label: 'All projects', icon: 'projects', to: 'projects.html', sep: true }
   ]
 });
