@@ -493,6 +493,7 @@ section{padding-top:clamp(64px,8vw,132px);}
 }
 .foot-id{display:grid; gap:6px; font-size:.92em;}
 .foot-id .logo{color:var(--ink); font-size:1.5em;}
+.foot-copy{font-size:.72em; opacity:.8; max-width:46ch;}
 .foot-links{display:flex; flex-wrap:wrap; gap:8px 28px;}
 .foot-links .pen{color:var(--ink);}
 .btn:hover .arr-up{transform:translateY(-4px);}

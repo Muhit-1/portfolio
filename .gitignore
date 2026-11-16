@@ -4,3 +4,18 @@ dist
 .claude
 assests
 CLAUDE.md
+
+# design explorations / mockups: kept private, never published
+design-variant-*.html
+card-styles*.html
+contact-variants.html
+pin-styles.html
+mockups/
+
+# unused image
+public/img/heropic.png
+
+# secrets and logs
+.env
+.env.*
+*.log

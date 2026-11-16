@@ -331,7 +331,8 @@ function wireTheme() {
 function fillFooter() {
   [].forEach.call(document.querySelectorAll('.foot'), function (el) {
     el.innerHTML =
-      '<div class="foot-id"><span class="logo">Muhit Kayeem<b>.</b></span><span>Backend-focused full-stack developer · Dhaka, Bangladesh</span></div>' +
+      '<div class="foot-id"><span class="logo">Muhit Kayeem<b>.</b></span><span>Backend-focused full-stack developer · Dhaka, Bangladesh</span>' +
+        '<span class="foot-copy mono">© 2026 Muhit Rahman · All rights reserved. Code &amp; design may not be reused without written permission.</span></div>' +
       '<nav class="foot-links" aria-label="Elsewhere">' +
         '<a class="pen" href="mailto:senanovi908@gmail.com">Email</a>' +
         '<a class="pen" href="https://github.com/muhit-1" target="_blank" rel="noopener">GitHub <span class="arr arr-out">↗</span></a>' +
